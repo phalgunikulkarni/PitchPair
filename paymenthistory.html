@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment History - Digital Manager</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --pitch-perfect-blue: #4361ee;
+            --echo-blue: rgba(67, 97, 238, 0.1);
+            --deep-dive-text: #333333;
+            --soft-pitch-text: #666666;
+            --thin-line: #dee2e6;
+            --platform-bg: #f8f9fa;
+            --spotlight-white: #ffffff;
+            --red-flag-orange: #fd7e14;
+            --success-green: #28a745;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--platform-bg);
+            color: var(--deep-dive-text);
+        }
+
+        .stage {
+            max-width: 1400px;
+            margin: 20px auto;
+        }
+
+        .main-act {
+            display: flex;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .top-billboard {
+            background-color: var(--pitch-perfect-blue);
+            color: var(--spotlight-white);
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo-shoutout {
+            font-weight: bold;
+            font-size: 20px;
+        }
+
+        .user-nook {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .profile-badge {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.2);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+        }
+
+        .side-stage {
+            width: 260px;
+            background-color: var(--spotlight-white);
+            height: calc(100vh - 80px);
+            border-right: 1px solid var(--thin-line);
+        }
+
+        .menu-cue {
+            padding: 15px 25px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--soft-pitch-text);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .menu-cue:hover {
+            background-color: var(--echo-blue);
+            color: var(--pitch-perfect-blue);
+        }
+
+        .menu-cue.active {
+            background-color: var(--echo-blue);
+            color: var(--deep-dive-text);
+            border-left: 3px solid var(--pitch-perfect-blue);
+        }
+
+        .menu-cue i {
+            width: 20px;
+        }
+
+        .center-stage {
+            flex: 1;
+            background-color: var(--spotlight-white);
+            padding: 20px 30px;
+            overflow-y: auto;
+            height: calc(100vh - 80px);
+        }
+
+        .headline-banner {
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .headline-banner h1 {
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+
+        .headline-banner p {
+            color: var(--soft-pitch-text);
+        }
+
+        .filter-controls {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            align-items: center;
+        }
+
+        .search-spotlight {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .search-input {
+            padding: 8px 15px;
+            border: 1px solid var(--thin-line);
+            border-radius: 4px;
+            width: 250px;
+        }
+
+        .filter-dropdown {
+            padding: 8px 15px;
+            border: 1px solid var(--thin-line);
+            border-radius: 4px;
+            background-color: var(--spotlight-white);
+        }
+
+        .date-filter {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .payment-history-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+        }
+
+        .payment-history-table th {
+            background-color: var(--echo-blue);
+            color: var(--deep-dive-text);
+            text-align: left;
+            padding: 12px 15px;
+            font-weight: 600;
+        }
+
+        .payment-history-table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid var(--thin-line);
+        }
+
+        .payment-history-table tr:hover {
+            background-color: var(--platform-bg);
+        }
+
+        .status-badge {
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+            display: inline-block;
+        }
+
+        .status-completed {
+            background-color: rgba(40, 167, 69, 0.1);
+            color: var(--success-green);
+        }
+
+        .status-pending {
+            background-color: rgba(253, 126, 20, 0.1);
+            color: var(--red-flag-orange);
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-view {
+            background-color: var(--echo-blue);
+            color: var(--pitch-perfect-blue);
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .btn-download {
+            background-color: var(--echo-blue);
+            color: var(--pitch-perfect-blue);
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .pagination-controls {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .page-btn {
+            width: 35px;
+            height: 35px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: 1px solid var(--thin-line);
+            border-radius: 4px;
+            background-color: var(--spotlight-white);
+            cursor: pointer;
+        }
+
+        .page-btn.active {
+            background-color: var(--pitch-perfect-blue);
+            color: var(--spotlight-white);
+            border-color: var(--pitch-perfect-blue);
+        }
+
+        .page-btn.nav {
+            width: auto;
+            padding: 0 10px;
+        }
+
+        .no-records {
+            text-align: center;
+            padding: 50px 0;
+            color: var(--soft-pitch-text);
+        }
+
+        .no-records i {
+            font-size: 48px;
+            margin-bottom: 15px;
+            color: var(--thin-line);
+        }
+
+        .export-btn {
+            background-color: var(--pitch-perfect-blue);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .export-btn:hover {
+            background-color: #3651d1;
+        }
+    </style>
+</head>
+<body>
+    <div class="stage">
+        <header class="top-billboard">
+            <div class="logo-shoutout">Digital Manager</div>
+            <div class="user-nook">
+                <span>Brand Account</span>
+                <div class="profile-badge">B</div>
+            </div>
+        </header>
+
+        <div class="main-act">
+            <aside class="side-stage">
+                <div class="menu-cue">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Dashboard</span>
+                </div>
+                <div class="menu-cue">
+                    <i class="fas fa-user"></i>
+                    <span>Profile</span>
+                </div>
+                <div class="menu-cue">
+                    <i class="fas fa-rocket"></i>
+                    <span>Start Campaign</span>
+                </div>
+                <div class="menu-cue">
+                    <i class="fas fa-clipboard-list"></i>
+                    <span>Past Performances</span>
+                </div>
+                <div class="menu-cue">
+                    <i class="fas fa-star"></i>
+                    <span>Starring Creators</span>
+                </div>
+                <div class="menu-cue">
+                    <i class="fas fa-envelope"></i>
+                    <span>Messaging</span>
+                </div>
+                <div class="menu-cue">
+                    <i class="fas fa-dollar-sign"></i>
+                    <span>Payments</span>
+                </div>
+                <div class="menu-cue active">
+                    <i class="fas fa-history"></i>
+                    <span>Payment History</span>
+                </div>
+                <div class="menu-cue">
+                    <i class="fas fa-cog"></i>
+                    <span>Settings</span>
+                </div>
+            </aside>
+
+            <main class="center-stage">
+                <div class="headline-banner">
+                    <div>
+                        <h1>Payment History</h1>
+                        <p>Review all your past transactions with creators</p>
+                    </div>
+                    <button class="export-btn">
+                        <i class="fas fa-download"></i> Export Report
+                    </button>
+                </div>
+
+                <div class="filter-controls">
+                    <div class="search-spotlight">
+                        <input type="text" class="search-input" placeholder="Search by creator or campaign">
+                        <select class="filter-dropdown" id="status-filter">
+                            <option value="all">All Statuses</option>
+                            <option value="completed">Completed</option>
+                            <option value="pending">Pending</option>
+                        </select>
+                    </div>
+                    <div class="date-filter">
+                        <span>Date Range:</span>
+                        <input type="date" class="filter-dropdown" id="date-from">
+                        <span>to</span>
+                        <input type="date" class="filter-dropdown" id="date-to">
+                    </div>
+                </div>
+
+                <table class="payment-history-table">
+                    <thead>
+                        <tr>
+                            <th>Transaction ID</th>
+                            <th>Creator</th>
+                            <th>Amount</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="payment-history-data">
+                        <!-- Payment history data will be loaded from database -->
+                    </tbody>
+                </table>
+
+                <!-- Empty state when no records are found -->
+                <div class="no-records">
+                    <i class="fas fa-receipt"></i>
+                    <h3>No Payment Records Found</h3>
+                    <p>Adjust your filters or try a different search term</p>
+                </div>
+
+                <div class="pagination-controls">
+                    <button class="page-btn nav">
+                        <i class="fas fa-chevron-left"></i> Previous
+                    </button>
+                    <button class="page-btn active">1</button>
+                    <button class="page-btn">2</button>
+                    <button class="page-btn">3</button>
+                    <button class="page-btn">...</button>
+                    <button class="page-btn">10</button>
+                    <button class="page-btn nav">
+                        Next <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/9.22.2/firebase-app-compat.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/9.22.2/firebase-firestore-compat.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/9.22.2/firebase-auth-compat.min.js"></script>    
+    <script>
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyCibzI6I27sUFMoT-EdIlyK37lXsUBPY18",
+            authDomain: "pitchpair.firebaseapp.com",
+            projectId: "pitchpair",
+            storageBucket: "pitchpair.firebasestorage.app",
+            messagingSenderId: "674714879785",
+            appId: "1:674714879785:web:95a2dd31d0630cb7d7d938",
+            measurementId: "G-NYDM6K408F"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+
+        // Test function to verify indexes
+        async function testIndexes() {
+            try {
+                const startTime = performance.now();
+                const [paymentsSnapshot] = await Promise.all([
+                    db.collection('payments')
+                        .where('uid', '==', auth.currentUser?.uid)
+                        .orderBy('createdAt', 'desc')
+                        .limit(1)
+                        .get()
+                ]);
+                const endTime = performance.now();                console.log(`Index test completed in ${endTime - startTime}ms`);
+                console.log('Indexes are working correctly!');
+                return true;
+            } catch (error) {
+                if (error.message.includes('index')) {
+                    console.error('Indexes are still building:', error.message);
+                    return false;
+                }
+                console.error('Other error:', error);
+                return false;
+            }
+        }
+
+        // Initialize UI elements
+        const tbody = document.getElementById('payment-history-data');
+        const noRecords = document.querySelector('.no-records');
+        noRecords.style.display = 'none';
+        tbody.innerHTML = '<tr><td colspan="4" style="text-align: center;">Loading payments...</td></tr>';
+
+        // Format utilities
+        function formatAmount(amount) {
+            if (!amount) return '₹0';
+            return '₹' + amount.toLocaleString('en-IN');
+        }
+
+        function formatDate(timestamp) {
+            if (!timestamp || !timestamp.toDate) return '';
+            return timestamp.toDate().toLocaleString('en-IN', { 
+                dateStyle: 'medium',
+                timeStyle: 'short'
+            });
+        }
+
+        // Render payments function
+        function renderPayments(payments) {
+            if (!payments || payments.length === 0) {
+                tbody.innerHTML = '';
+                noRecords.style.display = 'block';
+                return;
+            }
+
+            tbody.innerHTML = '';
+            noRecords.style.display = 'none';
+
+            // Sort by date if available
+            payments.sort((a, b) => {
+                return (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0);
+            });
+
+            payments.forEach(payment => {
+                const tr = document.createElement('tr');
+                const statusClass = payment.status === 'Completed' ? 'status-completed' : 'status-pending';
+                  tr.innerHTML = `
+                    <td>${payment.paymentId || 'N/A'}</td>
+                    <td>${payment.name || 'Unknown'}</td>
+                    <td>${formatAmount(payment.amount)}</td>
+                    <td>
+                        <span class="status-badge ${statusClass}">
+                            ${payment.status === 'Completed' ? 'Paid' : 'Pending'}
+                        </span>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        // Main function to fetch payments
+        async function fetchPayments(userId) {
+            try {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="4" style="text-align: center; padding: 20px;">
+                            <div style="display: flex; flex-direction: column; align-items: center; gap: 10px;">
+                                <div class="loading-spinner" style="border: 4px solid #f3f3f3; border-top: 4px solid #4a6cf7; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite;"></div>
+                                <div>Loading payments...</div>
+                            </div>
+                        </td>
+                    </tr>`;
+
+                // First try without ordering to check if there's any data
+                const simpleQuery = await db.collection('payments')
+                    .where('uid', '==', userId)
+                    .get();
+
+                if (simpleQuery.empty) {
+                    tbody.innerHTML = `
+                        <tr>
+                            <td colspan="4" style="text-align: center; padding: 20px;">
+                                No payment records found
+                            </td>
+                        </tr>`;
+                    return;
+                }
+
+                // If we have data, try with ordering
+                try {
+                    const [paymentsSnapshot, historySnapshot] = await Promise.all([
+                        db.collection('payments')
+                            .where('uid', '==', userId)
+                            .orderBy('createdAt', 'desc')
+                            .get(),
+                        db.collection('paymentHistory')
+                            .where('uid', '==', userId)
+                            .orderBy('createdAt', 'desc')
+                            .get()
+                    ]);
+
+                    const payments = [];
+                    
+                    paymentsSnapshot.forEach(doc => {
+                        payments.push({ id: doc.id, ...doc.data() });
+                    });
+                    
+                    historySnapshot.forEach(doc => {
+                        const data = doc.data();
+                        if (!payments.some(p => p.paymentId === data.paymentId)) {
+                            payments.push({ id: doc.id, ...data });
+                        }
+                    });
+
+                    renderPayments(payments);
+
+                } catch (orderError) {
+                    if (orderError.message.includes('index')) {
+                        // If index error, fall back to client-side sorting
+                        console.log('Index still building, falling back to client-side sorting');
+                        const payments = [];
+                        simpleQuery.forEach(doc => {
+                            payments.push({ id: doc.id, ...doc.data() });
+                        });
+                        
+                        // Sort on client side
+                        payments.sort((a, b) => {
+                            return (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0);
+                        });
+                        
+                        renderPayments(payments);
+                        
+                        // Show index building message
+                        const indexMessage = document.createElement('div');
+                        indexMessage.style.cssText = 'background-color: #fff3cd; color: #856404; padding: 12px; border-radius: 4px; margin: 10px 0; text-align: center;';
+                        indexMessage.innerHTML = 'Note: The system is optimizing the payment history. Some features may be temporarily slower.';
+                        tbody.parentElement.parentElement.insertBefore(indexMessage, tbody.parentElement.nextSibling);
+                    } else {
+                        throw orderError;
+                    }
+                }
+
+            } catch (error) {
+                console.error('Error fetching payments:', error);
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="4" style="text-align: center; padding: 20px;">                            <div style="color: #721c24; background-color: #f8d7da; padding: 12px; border-radius: 4px;">
+                                Error loading payments: ${error.message}
+                                <br>
+                                <button onclick="location.reload()" style="margin-top: 10px; padding: 6px 12px; background-color: #dc3545; color: white; border: none; border-radius: 4px; cursor: pointer;">
+                                    Retry
+                                </button>
+                            </div>
+                        </td>
+                    </tr>`;
+            }
+        }
+
+        // Initialize
+        auth.onAuthStateChanged(user => {
+            if (!user) {
+                window.location.href = 'signin.html';
+                return;
+            }
+            console.log('Fetching payments for user:', user.uid);
+            fetchPayments(user.uid);
+        });
+
+        // Filter functionality
+        const searchInput = document.querySelector('.search-input');
+        const statusFilter = document.getElementById('status-filter');
+
+        function filterPayments() {
+            const rows = tbody.querySelectorAll('tr');
+            const searchTerm = searchInput.value.toLowerCase().trim();
+            const statusValue = statusFilter.value;
+
+            rows.forEach(row => {
+                const name = row.cells[1].textContent.toLowerCase();
+                const status = row.querySelector('.status-badge').textContent.toLowerCase();
+                
+                const matchesSearch = name.includes(searchTerm);
+                const matchesStatus = statusValue === 'all' || 
+                    (statusValue === 'completed' && status === 'paid') ||
+                    (statusValue === 'pending' && status === 'pending');
+
+                row.style.display = matchesSearch && matchesStatus ? '' : 'none';
+            });
+
+            // Show/hide no records message
+            const hasVisibleRows = Array.from(rows).some(row => row.style.display !== 'none');
+            noRecords.style.display = hasVisibleRows ? 'none' : 'block';
+        }
+
+        searchInput.addEventListener('input', filterPayments);
+        statusFilter.addEventListener('change', filterPayments);
+    </script>
+</body>
+</html>

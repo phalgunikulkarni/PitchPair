@@ -1,0 +1,1217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pitch Pair</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+    <style>
+        :root {
+            --primary: #5046e5;
+            --primary-dark: #4338ca;
+            --primary-light: #e0e7ff;
+            --primary-lighter: #eef2ff;
+            --secondary: #06b6d4;
+            --secondary-dark: #0891b2;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --danger-light: #fee2e2;
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-300: #d1d5db;
+            --gray-400: #9ca3af;
+            --gray-500: #6b7280;
+            --gray-600: #4b5563;
+            --gray-700: #374151;
+            --gray-800: #1f2937;
+            --gray-900: #111827;
+        }
+
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+
+        body {
+            background-color: var(--gray-50);
+            color: var(--gray-800);
+            line-height: 1.5;
+        }
+
+
+        .min-h-screen {
+            min-height: 100vh;
+        }
+
+
+        .flex {
+            display: flex;
+        }
+
+
+        .flex-col {
+            flex-direction: column;
+        }
+
+
+        .flex-grow {
+            flex-grow: 1;
+        }
+
+
+        .flex-1 {
+            flex: 1;
+        }
+
+
+        .items-center {
+            align-items: center;
+        }
+
+
+        .justify-center {
+            justify-content: center;
+        }
+
+
+        .justify-between {
+            justify-content: space-between;
+        }
+
+
+        .justify-end {
+            justify-content: flex-end;
+        }
+
+
+        .hidden {
+            display: none;
+        }
+
+
+        .shadow {
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+        }
+
+
+        .shadow-sm {
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+        }
+
+
+        .shadow-md {
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+
+
+        .rounded-lg {
+            border-radius: 0.5rem;
+        }
+
+
+        .rounded-md {
+            border-radius: 0.375rem;
+        }
+
+
+        .rounded-full {
+            border-radius: 9999px;
+        }
+
+
+        .overflow-hidden {
+            overflow: hidden;
+        }
+
+
+        .bg-white {
+            background-color: white;
+        }
+
+
+        .text-sm {
+            font-size: 0.875rem;
+        }
+
+
+        .text-xs {
+            font-size: 0.75rem;
+        }
+
+
+        .text-base {
+            font-size: 1rem;
+        }
+
+
+        .text-lg {
+            font-size: 1.125rem;
+        }
+
+
+        .text-xl {
+            font-size: 1.25rem;
+        }
+
+
+        .text-2xl {
+            font-size: 1.5rem;
+        }
+
+
+        .font-medium {
+            font-weight: 500;
+        }
+
+
+        .font-bold {
+            font-weight: 700;
+        }
+
+
+        .uppercase {
+            text-transform: uppercase;
+        }
+
+
+        .border {
+            border: 1px solid var(--gray-200);
+        }
+
+
+        .border-b {
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+
+        .border-b-2 {
+            border-bottom-width: 2px;
+        }
+
+
+        .p-2 {
+            padding: 0.5rem;
+        }
+
+
+        .p-4 {
+            padding: 1rem;
+        }
+
+
+        .p-6 {
+            padding: 1.5rem;
+        }
+
+
+        .p-8 {
+            padding: 2rem;
+        }
+
+
+        .px-2 {
+            padding-left: 0.5rem;
+            padding-right: 0.5rem;
+        }
+
+
+        .px-3 {
+            padding-left: 0.75rem;
+            padding-right: 0.75rem;
+        }
+
+
+        .px-4 {
+            padding-left: 1rem;
+            padding-right: 1rem;
+        }
+
+
+        .px-5 {
+            padding-left: 1.25rem;
+            padding-right: 1.25rem;
+        }
+
+
+        .px-6 {
+            padding-left: 1.5rem;
+            padding-right: 1.5rem;
+        }
+
+
+        .py-1 {
+            padding-top: 0.25rem;
+            padding-bottom: 0.25rem;
+        }
+
+
+        .py-2 {
+            padding-top: 0.5rem;
+            padding-bottom: 0.5rem;
+        }
+
+
+        .py-3 {
+            padding-top: 0.75rem;
+            padding-bottom: 0.75rem;
+        }
+
+
+        .py-4 {
+            padding-top: 1rem;
+            padding-bottom: 1rem;
+        }
+
+
+        .pb-4 {
+            padding-bottom: 1rem;
+        }
+
+
+        .ml-2 {
+            margin-left: 0.5rem;
+        }
+
+
+        .ml-3 {
+            margin-left: 0.75rem;
+        }
+
+
+        .ml-4 {
+            margin-left: 1rem;
+        }
+
+
+        .ml-5 {
+            margin-left: 1.25rem;
+        }
+
+
+        .mr-2 {
+            margin-right: 0.5rem;
+        }
+
+
+        .mr-3 {
+            margin-right: 0.75rem;
+        }
+
+
+        .mr-4 {
+            margin-right: 1rem;
+        }
+
+
+        .mt-1 {
+            margin-top: 0.25rem;
+        }
+
+
+        .mt-2 {
+            margin-top: 0.5rem;
+        }
+
+
+        .mt-4 {
+            margin-top: 1rem;
+        }
+
+
+        .mt-6 {
+            margin-top: 1.5rem;
+        }
+
+
+        .mt-8 {
+            margin-top: 2rem;
+        }
+
+
+        .mt-auto {
+            margin-top: auto;
+        }
+
+
+        .mb-1 {
+            margin-bottom: 0.25rem;
+        }
+
+
+        .mb-2 {
+            margin-bottom: 0.5rem;
+        }
+
+
+        .mb-4 {
+            margin-bottom: 1rem;
+        }
+
+
+        .mb-6 {
+            margin-bottom: 1.5rem;
+        }
+
+
+        .mb-8 {
+            margin-bottom: 2rem;
+        }
+
+
+        .space-y-1 > * + * {
+            margin-top: 0.25rem;
+        }
+
+
+        .space-y-2 > * + * {
+            margin-top: 0.5rem;
+        }
+
+
+        .space-y-4 > * + * {
+            margin-top: 1rem;
+        }
+
+
+        .space-y-6 > * + * {
+            margin-top: 1.5rem;
+        }
+
+
+        .space-x-2 > * + * {
+            margin-left: 0.5rem;
+        }
+
+
+        .space-x-4 > * + * {
+            margin-left: 1rem;
+        }
+
+
+        .grid {
+            display: grid;
+        }
+
+
+        .grid-cols-1 {
+            grid-template-columns: repeat(1, minmax(0, 1fr));
+        }
+
+
+        .gap-4 {
+            gap: 1rem;
+        }
+
+
+        .gap-6 {
+            gap: 1.5rem;
+        }
+
+
+        .gap-8 {
+            gap: 2rem;
+        }
+
+
+        .w-full {
+            width: 100%;
+        }
+
+
+        .w-8 {
+            width: 2rem;
+        }
+
+
+        .w-12 {
+            width: 3rem;
+        }
+
+
+        .w-20 {
+            width: 5rem;
+        }
+
+
+        .w-32 {
+            width: 8rem;
+        }
+
+
+        .w-64 {
+            width: 16rem;
+        }
+
+
+        .h-3 {
+            height: 0.75rem;
+        }
+
+
+        .h-8 {
+            height: 2rem;
+        }
+
+
+        .h-12 {
+            height: 3rem;
+        }
+
+
+        .h-16 {
+            height: 4rem;
+        }
+
+
+        .h-20 {
+            height: 5rem;
+        }
+
+
+        .object-cover {
+            object-fit: cover;
+        }
+
+
+        .flex-shrink-0 {
+            flex-shrink: 0;
+        }
+
+
+        .relative {
+            position: relative;
+        }
+
+
+        .absolute {
+            position: absolute;
+        }
+
+
+        .bottom-0 {
+            bottom: 0;
+        }
+
+
+        .right-0 {
+            right: 0;
+        }
+
+
+        .focus\:outline-none:focus {
+            outline: none;
+        }
+
+
+        .settings-nav-item {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            color: var(--gray-600);
+            border-radius: 0.375rem;
+            transition: all 0.2s;
+            text-decoration: none;
+            margin-bottom: 0.25rem;
+        }
+
+
+        .settings-nav-item:hover {
+            background-color: var(--primary-lighter);
+            color: var(--primary);
+        }
+
+
+        .settings-nav-item.active {
+            background-color: var(--primary-lighter);
+            color: var(--primary);
+            font-weight: 500;
+        }
+
+
+        .settings-nav-item i {
+            margin-right: 0.75rem;
+            width: 1.25rem;
+            text-align: center;
+        }
+
+
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 24px;
+        }
+
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: var(--gray-300);
+            transition: .4s;
+            border-radius: 24px;
+        }
+
+
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+
+        input:checked + .toggle-slider {
+            background-color: var(--primary);
+        }
+
+
+        input:checked + .toggle-slider:before {
+            transform: translateX(26px);
+        }
+
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.5rem 1rem;
+            font-weight: 500;
+            font-size: 0.875rem;
+            border-radius: 0.375rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+
+        .btn-white {
+            background-color: white;
+            color: var(--gray-700);
+            border: 1px solid var(--gray-300);
+        }
+
+
+        .btn-white:hover {
+            background-color: var(--gray-50);
+        }
+
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+            border: 1px solid transparent;
+        }
+
+
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+        }
+
+
+        .btn-danger {
+            background-color: white;
+            color: var(--danger);
+            border: 1px solid var(--danger);
+        }
+
+
+        .btn-danger:hover {
+            background-color: var(--danger-light);
+        }
+
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.125rem 0.5rem;
+            font-size: 0.75rem;
+            font-weight: 500;
+            line-height: 1;
+            border-radius: 9999px;
+        }
+
+
+        .badge-success {
+            background-color: rgba(16, 185, 129, 0.1);
+            color: var(--success);
+        }
+
+
+        .badge-primary {
+            background-color: var(--primary-lighter);
+            color: var(--primary);
+        }
+
+
+        .badge-warning {
+            background-color: rgba(245, 158, 11, 0.1);
+            color: var(--warning);
+        }
+
+
+        .tab-button {
+            position: relative;
+            padding: 1rem 1.5rem;
+            font-weight: 500;
+            color: var(--gray-600);
+            border: none;
+            background: none;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+
+        .tab-button:hover {
+            color: var(--primary);
+        }
+
+
+        .tab-button.active {
+            color: var(--primary);
+        }
+
+
+        .tab-button.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background-color: var(--primary);
+        }
+
+
+        input[type="text"],
+        input[type="email"],
+        input[type="tel"],
+        input[type="password"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 0.5rem 0.75rem;
+            border: 1px solid var(--gray-300);
+            border-radius: 0.375rem;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            color: var(--gray-800);
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+
+        input[type="text"]:focus,
+        input[type="email"]:focus,
+        input[type="tel"]:focus,
+        input[type="password"]:focus,
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(80, 70, 229, 0.1);
+        }
+
+
+        label {
+            display: block;
+            margin-bottom: 0.25rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--gray-700);
+        }
+
+
+        .section-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--gray-900);
+            margin-bottom: 1.5rem;
+        }
+
+
+        .subsection-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--gray-800);
+            margin-bottom: 1rem;
+        }
+
+
+        .text-primary {
+            color: var(--primary);
+        }
+
+
+        .text-success {
+            color: var(--success);
+        }
+
+
+        .text-warning {
+            color: var(--warning);
+        }
+
+
+        .text-danger {
+            color: var(--danger);
+        }
+
+
+        .text-gray-500 {
+            color: var(--gray-500);
+        }
+
+
+        .text-gray-600 {
+            color: var(--gray-600);
+        }
+
+
+        .text-gray-700 {
+            color: var(--gray-700);
+        }
+
+
+        .text-gray-800 {
+            color: var(--gray-800);
+        }
+
+
+        .bg-primary {
+            background-color: var(--primary);
+        }
+
+
+        .bg-primary-lighter {
+            background-color: var(--primary-lighter);
+        }
+
+
+        .bg-success {
+            background-color: var(--success);
+        }
+
+
+        .bg-warning {
+            background-color: var(--warning);
+        }
+
+
+        .bg-danger {
+            background-color: var(--danger);
+        }
+
+
+        .bg-danger-light {
+            background-color: var(--danger-light);
+        }
+
+
+        .bg-gray-50 {
+            background-color: var(--gray-50);
+        }
+
+
+        .bg-gray-100 {
+            background-color: var(--gray-100);
+        }
+
+
+        .card {
+            background-color: white;
+            border-radius: 0.5rem;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+            overflow: hidden;
+        }
+
+
+        .card-header {
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+
+        .card-body {
+            padding: 1.5rem;
+        }
+
+
+        .border-primary {
+            border-color: var(--primary);
+        }
+
+
+        .border-gray-200 {
+            border-color: var(--gray-200);
+        }
+
+
+        .border-gray-300 {
+            border-color: var(--gray-300);
+        }
+
+
+        .border-danger {
+            border-color: var(--danger);
+        }
+
+
+        .section-divider {
+            height: 1px;
+            background-color: var(--gray-200);
+            margin: 1.5rem 0;
+        }
+
+
+        @media (min-width: 768px) {
+            .md\:flex {
+                display: flex;
+            }
+
+
+            .md\:hidden {
+                display: none;
+            }
+
+
+            .md\:flex-col {
+                flex-direction: column;
+            }
+
+
+            .md\:w-64 {
+                width: 16rem;
+            }
+
+
+            .md\:grid-cols-2 {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="min-h-screen flex">
+       
+        <div class="hidden md:flex md:flex-col md:w-64 bg-white shadow">
+            <div class="flex items-center justify-center h-16 border-b">
+                <h1 class="text-2xl font-bold text-primary">Creator Hub</h1>
+            </div>
+            <div class="flex flex-col flex-grow p-4">
+                <div class="flex items-center mb-8">
+                    <div class="relative">
+                        <img src="/api/placeholder/64/64" alt="User Profile" class="w-12 h-12 rounded-full object-cover border-2 border-primary" />
+                        <div class="absolute bottom-0 right-0 bg-success w-3 h-3 rounded-full border-2 border-white"></div>
+                    </div>
+                    <div class="ml-4">
+                        <p class="font-medium">Jane Cooper</p>
+                        <p class="text-sm text-gray-500">@janecooper</p>
+                    </div>
+                </div>
+                <nav class="flex-grow space-y-1">
+                    <a href="#" class="settings-nav-item">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <span>Dashboard</span>
+                    </a>
+                    <a href="#" class="settings-nav-item">
+                        <i class="fas fa-chart-bar"></i>
+                        <span>Analytics</span>
+                    </a>
+                    <a href="#" class="settings-nav-item">
+                        <i class="fas fa-video"></i>
+                        <span>Content</span>
+                    </a>
+                    <a href="#" class="settings-nav-item">
+                        <i class="fas fa-dollar-sign"></i>
+                        <span>Monetization</span>
+                    </a>
+                    <a href="#" class="settings-nav-item">
+                        <i class="fas fa-users"></i>
+                        <span>Community</span>
+                    </a>
+                    <a href="#" class="settings-nav-item active">
+                        <i class="fas fa-cog"></i>
+                        <span>Settings</span>
+                    </a>
+                </nav>
+                <div class="mt-auto">
+                    <a href="#" class="settings-nav-item text-danger">
+                        <i class="fas fa-sign-out-alt"></i>
+                        <span>Logout</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+
+   
+        <div class="flex-1">
+           
+            <header class="bg-white shadow-sm flex items-center justify-between h-16 px-6">
+                <div class="flex items-center">
+                    <button class="md:hidden text-gray-600 focus:outline-none">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                    <h2 class="ml-4 text-lg font-medium">Settings</h2>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <button class="relative text-gray-600 hover:text-primary focus:outline-none">
+                        <i class="fas fa-bell text-xl"></i>
+                        <span class="absolute top-0 right-0 h-2 w-2 rounded-full bg-danger"></span>
+                    </button>
+                    <button class="md:hidden flex items-center text-gray-600 hover:text-primary focus:outline-none">
+                        <img src="/api/placeholder/32/32" alt="User Avatar" class="w-8 h-8 rounded-full object-cover border border-gray-200" />
+                    </button>
+                </div>
+            </header>
+
+
+           
+            <main class="p-6">
+               
+                <div class="mb-8 bg-white rounded-lg shadow overflow-hidden">
+                    <nav class="flex border-b overflow-x-auto">
+                        <button class="tab-button active">Account</button>
+                        <button class="tab-button">Profile</button>
+                        <button class="tab-button">Appearance</button>
+                        <button class="tab-button">Notifications</button>
+                        <button class="tab-button">Privacy</button>
+                        <button class="tab-button">Billing</button>
+                    </nav>
+
+
+           
+                    <div class="p-6">
+                        <h3 class="section-title">Account Settings</h3>
+
+
+                       
+                        <div class="mb-8">
+                            <h4 class="subsection-title">Basic Information</h4>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label for="username">Username</label>
+                                    <input type="text" id="username" name="username" value="janecooper" />
+                                </div>
+                                <div>
+                                    <label for="display-name">Display Name</label>
+                                    <input type="text" id="display-name" name="display-name" value="Jane Cooper" />
+                                </div>
+                                <div>
+                                    <label for="email">Email Address</label>
+                                    <div class="flex">
+                                        <input type="email" id="email" name="email" value="jane@example.com" />
+                                        <span class="ml-2 flex items-center">
+                                            <span class="badge badge-success">
+                                                <i class="fas fa-check mr-1"></i> Verified
+                                            </span>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div>
+                                    <label for="phone">Phone Number</label>
+                                    <input type="tel" id="phone" name="phone" value="(555) 123-4567" />
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="section-divider"></div>
+
+
+                       
+                        <div class="mb-8">
+                            <h4 class="subsection-title">Profile Images</h4>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                <div>
+                                    <label class="block mb-2">Profile Picture</label>
+                                    <div class="flex items-center">
+                                        <img src="/api/placeholder/80/80" alt="Profile" class="w-20 h-20 rounded-full object-cover border-2 border-primary" />
+                                        <div class="ml-5">
+                                            <button class="btn btn-white mb-2">
+                                                <i class="fas fa-upload mr-2"></i> Upload
+                                            </button>
+                                            <p class="text-xs text-gray-500">JPG, PNG or GIF. 1MB max.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <label class="block mb-2">Cover Image</label>
+                                    <div class="flex items-center">
+                                        <div class="w-32 h-20 bg-gray-100 rounded-md overflow-hidden flex-shrink-0 border border-gray-200">
+                                            <img src="/api/placeholder/128/80" alt="Cover" class="w-full h-full object-cover" />
+                                        </div>
+                                        <div class="ml-5">
+                                            <button class="btn btn-white mb-2">
+                                                <i class="fas fa-upload mr-2"></i> Upload
+                                            </button>
+                                            <p class="text-xs text-gray-500">1920 x 480px recommended. 2MB max.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="section-divider"></div>
+
+
+                       
+                        <div class="mb-8">
+                            <h4 class="subsection-title">Security</h4>
+                            <div class="space-y-4">
+                                <div class="flex items-center justify-between pb-4 border-b">
+                                    <div>
+                                        <h5 class="font-medium">Password</h5>
+                                        <p class="text-sm text-gray-500">Last changed 3 months ago</p>
+                                    </div>
+                                    <button class="btn btn-white">
+                                        <i class="fas fa-lock mr-2"></i> Change Password
+                                    </button>
+                                </div>
+                                <div class="flex items-center justify-between pb-4 border-b">
+                                    <div>
+                                        <h5 class="font-medium">Two-Factor Authentication</h5>
+                                        <p class="text-sm text-gray-500">Add an extra layer of security to your account</p>
+                                    </div>
+                                    <label class="toggle-switch">
+                                        <input type="checkbox" checked>
+                                        <span class="toggle-slider"></span>
+                                    </label>
+                                </div>
+                                <div class="flex items-center justify-between pb-4 border-b">
+                                    <div>
+                                        <h5 class="font-medium">Recovery Codes</h5>
+                                        <p class="text-sm text-gray-500">Access your account if you lose your device</p>
+                                    </div>
+                                    <button class="btn btn-white">
+                                        <i class="fas fa-download mr-2"></i> Download
+                                    </button>
+                                </div>
+                                <div class="flex items-center justify-between pb-4">
+                                    <div>
+                                        <h5 class="font-medium">Connected Accounts</h5>
+                                        <p class="text-sm text-gray-500">Manage your linked social accounts</p>
+                                    </div>
+                                    <button class="btn btn-white">
+                                        <i class="fas fa-link mr-2"></i> Manage
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="section-divider"></div>
+
+
+                       
+                        <div class="mb-8">
+                            <h4 class="subsection-title">Creator Settings</h4>
+                            <div class="space-y-4">
+                                <div class="flex items-center justify-between pb-4 border-b">
+                                    <div>
+                                        <h5 class="font-medium">Content Language</h5>
+                                        <p class="text-sm text-gray-500">Default language for your content</p>
+                                    </div>
+                                    <select class="w-auto">
+                                        <option>English (US)</option>
+                                        <option>Spanish</option>
+                                        <option>French</option>
+                                        <option>German</option>
+                                        <option>Japanese</option>
+                                    </select>
+                                </div>
+                                <div class="flex items-center justify-between pb-4 border-b">
+                                    <div>
+                                        <h5 class="font-medium">Content Category</h5>
+                                        <p class="text-sm text-gray-500">Primary category for your channel</p>
+                                    </div>
+                                    <select class="w-auto">
+                                        <option>Education</option>
+                                        <option>Entertainment</option>
+                                        <option>Gaming</option>
+                                        <option>Music</option>
+                                        <option>Technology</option>
+                                        <option>Lifestyle</option>
+                                    </select>
+                                </div>
+                                <div class="flex items-center justify-between pb-4 border-b">
+                                    <div>
+                                        <h5 class="font-medium">Channel Visibility</h5>
+                                        <p class="text-sm text-gray-500">Control who can see your channel</p>
+                                    </div>
+                                    <select class="w-auto">
+                                        <option>Public</option>
+                                        <option>Unlisted</option>
+                                        <option>Private</option>
+                                    </select>
+                                </div>
+                                <div class="flex items-center justify-between pb-4">
+                                    <div>
+                                        <h5 class="font-medium">Content Monetization</h5>
+                                        <p class="text-sm text-gray-500">Enable monetization for your content</p>
+                                    </div>
+                                    <label class="toggle-switch">
+                                        <input type="checkbox" checked>
+                                        <span class="toggle-slider"></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="section-divider"></div>
+
+
+                       
+
+
+                       
+                        <div class="bg-danger-light rounded-lg p-6">
+                            <h4 class="text-base font-medium text-danger mb-4">Danger Zone</h4>
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <h5 class="font-medium text-danger">Delete Account</h5>
+                                    <p class="text-sm text-gray-700">Permanently delete your account and all of your content</p>
+                                </div>
+                                <button class="btn btn-danger">
+                                    <i class="fas fa-trash-alt mr-2"></i> Delete Account
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+               
+                <div class="flex justify-end mt-6">
+                    <button class="btn btn-white mr-4">Cancel</button>
+                    <button class="btn btn-primary">
+                        <i class="fas fa-save mr-2"></i> Save Changes
+                    </button>
+                </div>
+            </main>
+        </div>
+    </div>
+</body>
+</html>
+

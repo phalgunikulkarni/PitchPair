@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PitchPair - Sign In</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .login-container {
+            max-width: 400px;
+            margin: 100px auto;
+            background-color: white;
+            color: #333;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+        }
+
+        .login-container h2 {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .login-container input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .login-container button {
+            width: 100%;
+            background-color: #2a5298;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+            font-size: 16px;
+        }        .login-container button:hover {
+            background-color: #1e3c72;
+        }
+
+        .login-container button:disabled {
+            background-color: #93a8cc;
+            cursor: not-allowed;
+        }
+
+        .login-container button.success {
+            background-color: #10b981;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <h2>Sign In</h2>
+        <form id="signin-form">
+            <input type="email" id="email" placeholder="Email" required>
+            <input type="password" id="password" placeholder="Password" required>
+            <button type="submit">Sign In</button>
+        </form>    </div>
+
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+    
+    <script>
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyCibzI6I27sUFMoT-EdIlyK37lXsUBPY18",
+            authDomain: "pitchpair.firebaseapp.com",
+            projectId: "pitchpair",
+            storageBucket: "pitchpair.firebasestorage.app",
+            messagingSenderId: "674714879785",
+            appId: "1:674714879785:web:95a2dd31d0630cb7d7d938",
+            measurementId: "G-NYDM6K408F"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();        // Handle Sign In
+        const form = document.getElementById('signin-form');
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const submitBtn = form.querySelector('button[type="submit"]');
+            
+            // Disable the submit button while processing
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Signing in...';
+
+            try {
+                // Authenticate with Firebase
+                const userCredential = await auth.signInWithEmailAndPassword(email, password);
+                console.log('User signed in:', userCredential.user.email);
+                
+                // Add a small delay before redirect to show the success state
+                submitBtn.textContent = 'Success!';
+                setTimeout(() => {
+                    window.location.href = 'joinas.html';
+                }, 500);
+            } catch (error) {
+                console.error('Sign in error:', error);
+                // Handle specific authentication errors
+                let errorMessage = 'Invalid email or password.';
+                if (error.code === 'auth/user-not-found') {
+                    errorMessage = 'No account found with this email.';
+                } else if (error.code === 'auth/wrong-password') {
+                    errorMessage = 'Incorrect password.';
+                }
+                alert(errorMessage);
+                
+                // Reset the submit button
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Sign In';
+            }
+        });
+    </script>
+</body>
+</html>

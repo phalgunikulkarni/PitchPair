@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PitchPair - Payment Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+        
+        body {
+            background-color: #f8f9fa;
+            color: #333;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            width: 100%;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            border-bottom: 1px solid #eaeaea;
+            margin-bottom: 30px;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: #4a6cf7;
+        }
+        
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #4a6cf7;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+        }
+        
+        .username {
+            font-weight: 500;
+        }
+        
+        .content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        
+        h1 {
+            font-size: 24px;
+            color: #333;
+        }
+        
+        .search-bar {
+            display: flex;
+            align-items: center;
+            background: white;
+            border-radius: 8px;
+            padding: 10px 16px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            width: 300px;
+        }
+        
+        .search-bar input {
+            border: none;
+            outline: none;
+            width: 100%;
+            padding: 0 10px;
+            font-size: 14px;
+        }
+        
+        .search-icon {
+            color: #888;
+        }
+        
+        .table-container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+            margin-bottom: 30px;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        th {
+            background-color: #f8f9fa;
+            text-align: left;
+            padding: 16px 20px;
+            font-weight: 600;
+            color: #555;
+            font-size: 14px;
+            border-bottom: 1px solid #eaeaea;
+        }
+        
+        td {
+            padding: 16px 20px;
+            border-bottom: 1px solid #eaeaea;
+            font-size: 14px;
+        }
+        
+        tr:last-child td {
+            border-bottom: none;
+        }
+        
+        .influencer-name {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .influencer-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #e6ecff;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #4a6cf7;
+            font-weight: 600;
+        }
+        
+        .influencer-info {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .influencer-handle {
+            color: #888;
+            font-size: 13px;
+        }
+        
+        .badge {
+            background-color: #e6f0ff;
+            color: #4a6cf7;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        
+        .badge.pending {
+            background-color: #fff8e6;
+            color: #ffa500;
+        }
+        
+        .badge.paid {
+            background-color: #e6fff0;
+            color: #00c853;
+        }
+        
+        .invoice-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: #4a6cf7;
+            font-weight: 500;
+            cursor: pointer;
+            padding: 6px 12px;
+            border-radius: 6px;
+            transition: background-color 0.2s;
+        }
+        
+        .invoice-button:hover {
+            background-color: #f5f7ff;
+        }
+        
+        .pay-button {
+            background-color: #4a6cf7;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        
+        .pay-button:hover {
+            background-color: #3a5ce5;
+        }
+        
+        .pay-button.paid {
+            background-color: #e6fff0;
+            color: #00c853;
+            cursor: default;
+        }
+        
+        .pay-button.paid:hover {
+            background-color: #e6fff0;
+        }
+        
+        .pagination {
+            display: flex;
+            justify-content: flex-end;
+            gap: 8px;
+            margin-top: 20px;
+        }
+        
+        .page-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            background-color: white;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+        
+        .page-button:hover {
+            background-color: #f5f7ff;
+        }
+        
+        .page-button.active {
+            background-color: #4a6cf7;
+            color: white;
+        }
+        
+        footer {
+            padding: 20px 0;
+            text-align: center;
+            color: #666;
+            font-size: 14px;
+            margin-top: 30px;
+            border-top: 1px solid #eaeaea;
+        }
+        
+        @media (max-width: 768px) {
+            .dashboard-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 16px;
+            }
+            
+            .search-bar {
+                width: 100%;
+            }
+            
+            .table-container {
+                overflow-x: auto;
+            }
+            
+            th, td {
+                padding: 12px 16px;
+            }
+            
+            .pagination {
+                justify-content: center;
+            }
+        }
+    </style>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/9.22.2/firebase-app-compat.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/9.22.2/firebase-firestore-compat.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/9.22.2/firebase-auth-compat.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">PitchPair</div>
+            <div class="user-menu">
+                <div class="username">Brand Account</div>
+                <div class="avatar">BA</div>
+            </div>
+        </header>
+        
+        <div class="content">
+            <div class="dashboard-header">
+                <h1>Payment Dashboard</h1>
+                <div style="display: flex; gap: 12px; align-items: center;">
+                    <div class="search-bar">
+                        <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                        </svg>
+                        <input type="text" placeholder="Search influencers...">
+                    </div>
+                    <button id="generate-invoice-btn" style="background:#4a6cf7;color:#fff;border:none;padding:10px 18px;border-radius:8px;font-weight:500;cursor:pointer;">Generate Invoice Template</button>
+                </div>
+            </div>
+            
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Sl No</th>
+                            <th>Influencer</th>
+                            <th>Status</th>
+                            <th>Invoice</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>
+                                <div class="influencer-name">
+                                    <div class="influencer-avatar">AS</div>
+                                    <div class="influencer-info">
+                                        <div>Aisha Singh</div>
+                                        <div class="influencer-handle">@aisha_creates</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td><span class="badge pending">Pending</span></td>
+                            <td>
+                                <div class="invoice-button">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                        <polyline points="14 2 14 8 20 8"></polyline>
+                                        <line x1="16" y1="13" x2="8" y2="13"></line>
+                                        <line x1="16" y1="17" x2="8" y2="17"></line>
+                                        <polyline points="10 9 9 9 8 9"></polyline>
+                                    </svg>
+                                    INV-2023-001
+                                </div>
+                            </td>
+                            <td>
+                                <button class="pay-button" onclick="initiatePayment(1499, 'Aisha Singh', 'INV-2023-001')">Pay Now</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>
+                                <div class="influencer-name">
+                                    <div class="influencer-avatar">RK</div>
+                                    <div class="influencer-info">
+                                        <div>Rahul Kumar</div>
+                                        <div class="influencer-handle">@rahul_tech</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td><span class="badge paid">Paid</span></td>
+                            <td>
+                                <div class="invoice-button">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                        <polyline points="14 2 14 8 20 8"></polyline>
+                                        <line x1="16" y1="13" x2="8" y2="13"></line>
+                                        <line x1="16" y1="17" x2="8" y2="17"></line>
+                                        <polyline points="10 9 9 9 8 9"></polyline>
+                                    </svg>
+                                    INV-2023-002
+                                </div>
+                            </td>
+                            <td>
+                                <button class="pay-button paid" disabled>Paid</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td>
+                                <div class="influencer-name">
+                                    <div class="influencer-avatar">PP</div>
+                                    <div class="influencer-info">
+                                        <div>Priya Patel</div>
+                                        <div class="influencer-handle">@priya_lifestyle</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td><span class="badge pending">Pending</span></td>
+                            <td>
+                                <div class="invoice-button">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                        <polyline points="14 2 14 8 20 8"></polyline>
+                                        <line x1="16" y1="13" x2="8" y2="13"></line>
+                                        <line x1="16" y1="17" x2="8" y2="17"></line>
+                                        <polyline points="10 9 9 9 8 9"></polyline>
+                                    </svg>
+                                    INV-2023-003
+                                </div>
+                            </td>
+                            <td>
+                                <button class="pay-button" onclick="redirectToPayment('Priya Patel', 'INV-2023-003', 2499)">Pay Now</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>4</td>
+                            <td>
+                                <div class="influencer-name">
+                                    <div class="influencer-avatar">AM</div>
+                                    <div class="influencer-info">
+                                        <div>Alex Miller</div>
+                                        <div class="influencer-handle">@alex_travels</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td><span class="badge pending">Pending</span></td>
+                            <td>
+                                <div class="invoice-button">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></polyline>
+                                        <line x1="16" y1="13" x2="8" y2="13"></line>
+                                        <line x1="16" y1="17" x2="8" y2="17"></line>
+                                        <polyline points="10 9 9 9 8 9"></polyline>
+                                    </svg>
+                                    INV-2023-004
+                                </div>
+                            </td>
+                            <td>
+                                <button class="pay-button" onclick="redirectToPayment('Alex Miller', 'INV-2023-004', 1899)">Pay Now</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>5</td>
+                            <td>
+                                <div class="influencer-name">
+                                    <div class="influencer-avatar">ST</div>
+                                    <div class="influencer-info">
+                                        <div>Sophia Tan</div>
+                                        <div class="influencer-handle">@sophia_beauty</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td><span class="badge paid">Paid</span></td>
+                            <td>
+                                <div class="invoice-button">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                        <polyline points="14 2 14 8 20 8"></polyline>
+                                        <line x1="16" y1="13" x2="8" y2="13"></line>
+                                        <line x1="16" y1="17" x2="8" y2="17"></line>
+                                        <polyline points="10 9 9 9 8 9"></polyline>
+                                    </svg>
+                                    INV-2023-005
+                                </div>
+                            </td>
+                            <td>
+                                <button class="pay-button paid" disabled>Paid</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="pagination">
+                <div class="page-button">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="15 18 9 12 15 6"></polyline>
+                    </svg>
+                </div>
+                <div class="page-button active">1</div>
+                <div class="page-button">2</div>
+                <div class="page-button">3</div>
+                <div class="page-button">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="9 18 15 12 9 6"></polyline>
+                    </svg>
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>© 2025 PitchPair. All rights reserved.</p>
+        </footer>
+    </div>
+    
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/9.22.2/firebase-app-compat.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/9.22.2/firebase-firestore-compat.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/9.22.2/firebase-auth-compat.min.js"></script>
+    <script>
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyCibzI6I27sUFMoT-EdIlyK37lXsUBPY18",
+            authDomain: "pitchpair.firebaseapp.com",
+            projectId: "pitchpair",
+            storageBucket: "pitchpair.firebasestorage.app",
+            messagingSenderId: "674714879785",
+            appId: "1:674714879785:web:95a2dd31d0630cb7d7d938",
+            measurementId: "G-NYDM6K408F"
+        };
+
+        // Initialize Firebase
+        const app = firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+
+        // Check if user is logged in
+        auth.onAuthStateChanged((user) => {
+            if (!user) {
+                console.log('No user logged in. Redirecting to login...');
+                window.location.href = 'signin.html';
+            } else {
+                console.log('User is logged in:', user.uid);
+            }
+        });
+
+        // Razorpay API key
+        const razorpayKey = "rzp_test_DtTawXRqrkMeHh";
+
+        // Function to initialize Razorpay payment
+        function initiatePayment(amount, name, invoice) {
+            if (!auth.currentUser) {
+                console.error("User is not authenticated");
+                alert("Please log in to make a payment");
+                window.location.href = 'signin.html';
+                return;
+            }
+
+            const options = {
+                key: razorpayKey,
+                amount: amount * 100,
+                currency: "INR",
+                name: "PitchPair",
+                description: `Payment for Invoice ${invoice}`,
+                image: "https://your-logo-url.com/logo.png",
+                handler: async function (response) {
+                    console.log("Payment successful! Payment ID:", response.razorpay_payment_id);
+                    try {
+                        // Check if user is still authenticated
+                        if (!auth.currentUser) {
+                            throw new Error("User is not authenticated");
+                        }
+
+                        const paymentDetails = {
+                            paymentId: response.razorpay_payment_id,
+                            uid: auth.currentUser.uid,
+                            name: name,
+                            invoice: invoice,
+                            amount: amount,
+                            currency: "INR",
+                            status: "Completed",
+                            createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                        };
+
+                        console.log("Current user:", auth.currentUser);
+                        console.log("Current user UID:", auth.currentUser.uid);
+                        console.log("Payment details to be written:", paymentDetails);
+                        
+                        const docRef = await db.collection("payments").add(paymentDetails);
+                        console.log("Payment details saved with ID:", docRef.id);
+
+                        // Also save to paymentHistory collection
+                        try {
+                            await db.collection("paymentHistory").add(paymentDetails);
+                            console.log("Payment details also saved to paymentHistory collection.");
+                        } catch (historyError) {
+                            console.error("Error saving to paymentHistory:", historyError);
+                        }
+
+                        alert("Payment successful!");
+                        // Update the action column to show 'Paid' without reloading
+                        const rows = document.querySelectorAll('tbody tr');
+                        rows.forEach(row => {
+                            const invoiceCell = row.querySelector('.invoice-button');
+                            if (invoiceCell && invoiceCell.textContent.includes(invoice)) {
+                                // Update status badge
+                                const statusCell = row.querySelector('td:nth-child(3) .badge');
+                                if (statusCell) {
+                                    statusCell.textContent = 'Paid';
+                                    statusCell.classList.remove('pending');
+                                    statusCell.classList.add('paid');
+                                }
+                                // Update action button
+                                const actionCell = row.querySelector('td:last-child');
+                                if (actionCell) {
+                                    actionCell.innerHTML = '<button class="pay-button paid" disabled>Paid</button>';
+                                }
+                            }
+                        });
+                        // Ensure redirect happens after DOM update
+                        setTimeout(function() {
+                            window.location.href = 'paymenthistory.html';
+                        }, 500);
+                    } catch (error) {
+                        console.error("Error saving payment:", error);
+                        if (error.message.includes("permission")) {
+                            alert("Authentication error. Please try logging in again.");
+                            window.location.href = 'signin.html';
+                        } else {
+                            alert("Payment was successful but failed to save details. Error: " + error.message);
+                        }
+                    }
+                },
+                prefill: {
+                    name: name,
+                    email: auth.currentUser?.email || "user@example.com",
+                    contact: "9999999999"
+                },
+                theme: {
+                    color: "#4a6cf7"
+                }
+            };
+
+            console.log("Initializing Razorpay with options:", options);
+            const rzp = new Razorpay(options);
+            console.log("Razorpay object created:", rzp);
+            rzp.open();
+            console.log("Razorpay payment window opened.");
+        }
+
+        // Function to redirect to payment page with influencer details
+        function redirectToPayment(name, invoice, amount) {
+            // Store the payment details in localStorage or you could pass as URL parameters
+            localStorage.setItem('paymentDetails', JSON.stringify({
+                name: name,
+                invoice: invoice,
+                amount: amount
+            }));
+            
+            // Redirect to the payment page
+            window.location.href = 'razorpay-payment.html';
+        }
+        
+        // Search functionality
+        document.querySelector('.search-bar input').addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase().trim();
+            const rows = document.querySelectorAll('tbody tr');
+            
+            rows.forEach(row => {
+                const influencerName = row.querySelector('.influencer-info div:first-child').textContent.toLowerCase();
+                const influencerHandle = row.querySelector('.influencer-handle').textContent.toLowerCase();
+                
+                if (influencerName.includes(searchTerm) || influencerHandle.includes(searchTerm)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        });
+
+        // Invoice template generation with Ollama
+        const generateInvoiceBtn = document.getElementById('generate-invoice-btn');
+        generateInvoiceBtn.addEventListener('click', async function() {
+            generateInvoiceBtn.disabled = true;
+            generateInvoiceBtn.textContent = 'Generating...';
+            // Use the provided invoice template directly
+            const invoiceText = `Invoice Number: [Unique Invoice ID]\nInvoice Date: [DD/MM/YYYY]\nDue Date: [DD/MM/YYYY]\n\nBrand Information\nBrand Name: [Brand's Name]\nContact Person: [Name of Contact Person]\nEmail: [Brand's Email Address]\nPhone: [Brand's Contact Number]\nBilling Address:\n[Brand’s Billing Address]\n\nInfluencer Information\nInfluencer Name: [Influencer's Name or Handle]\nEmail: [Influencer's Email Address]\nPhone: [Influencer’s Contact Number] (Optional)\nBank/UPI Details: [Bank Account, UPI ID, PayPal, etc.]\n\nCampaign e Details\nCampaign Name: [Campaign Name]\nPlatform: [Instagram/YouTube/TikTok, etc.]\nPost Type: [Story/Reel/Static Post, etc.]\nDeliverables: [Detailed Description of Content]\nPosting Date: [Scheduled or Actual Posting Date]\nEngagement Metrics (optional): [Expected or Actual Views/Likes/Comments]\n\nPayment Details\nFee per Deliverable: [Amount per Post]\nTotal Amount: [Total Amount to be Paid]\nCurrency: [USD, INR, etc.]\nTax (optional): [Applicable Tax if any]\nDiscount (optional): [Negotiated Discount if any]\n\nTerms & Notes\nPayment Terms: [Net 7/15/30 Days, Upfront, etc.]\nAdditional Notes:\n[Usage Rights, Late Fees, etc.]\n\nSignature\n[Influencer's Signature or Digital Signature]\n`;
+            try {
+                // Create a text file and trigger download
+                const blob = new Blob([invoiceText], { type: 'text/plain' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'invoice.txt';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+                alert('Invoice template generated and downloaded as invoice.txt');
+            } catch (err) {
+                alert('Error generating invoice template.');
+            }
+            generateInvoiceBtn.disabled = false;
+            generateInvoiceBtn.textContent = 'Generate Invoice Template';
+        });
+    </script>
+</body>
+</html>

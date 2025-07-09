@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Messaging Interface</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+        
+        body {
+            background-color: #f6f8fc;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .email-container {
+            width: 90%;
+            max-width: 800px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 1px 2px 0 rgba(60, 64, 67, 0.3), 0 2px 6px 2px rgba(60, 64, 67, 0.15);
+            display: flex;
+            flex-direction: column;
+            height: 80vh;
+            position: relative;
+        }
+        
+        .email-header {
+            padding: 12px 16px;
+            border-bottom: 1px solid #e0e0e0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .email-header-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        
+        .minimize-btn, .expand-btn, .close-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #5f6368;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            height: 24px;
+        }
+        
+        .email-title {
+            color: #202124;
+            font-size: 16px;
+            font-weight: normal;
+        }
+        
+        .recipient-row, .subject-row {
+            display: flex;
+            border-bottom: 1px solid #e0e0e0;
+            padding: 8px 16px;
+            align-items: center;
+        }
+        
+        .recipient-label, .subject-label {
+            width: 60px;
+            color: #5f6368;
+            font-size: 14px;
+        }
+        
+        .recipient-input, .subject-input {
+            flex: 1;
+            border: none;
+            outline: none;
+            font-size: 14px;
+            color: #202124;
+        }
+        
+        
+        .email-body {
+            flex: 1;
+            padding: 16px;
+            overflow-y: auto;
+            outline: none;
+            font-size: 14px;
+            color: #202124;
+        }
+        
+        .email-footer {
+            padding: 12px 16px;
+            border-top: 1px solid #e0e0e0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .email-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .send-btn {
+            background-color: #0b57d0;
+            color: white;
+            border: none;
+            border-radius: 18px;
+            padding: 8px 24px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        
+        .send-btn:hover {
+            background-color: #0842a0;
+        }
+        
+        .send-options {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            cursor: pointer;
+            border: none;
+            background: none;
+            color: #5f6368;
+            font-size: 18px;
+        }
+        
+        .toolbar {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+        
+        .toolbar-btn {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #5f6368;
+            border-radius: 4px;
+            transition: background-color 0.2s;
+        }
+        
+        .toolbar-btn:hover {
+            background-color: #f1f3f4;
+        }
+        
+        .toolbar-icon {
+            width: 20px;
+            height: 20px;
+        }
+        
+        .delete-btn {
+            margin-left: auto;
+        }
+        
+        .ai-assistant-btn {
+            background-color: #fbbc04;
+            color: #202124;
+            border: none;
+            border-radius: 16px;
+            padding: 6px 12px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-right: 12px;
+        }
+        
+        .ai-assistant-btn:hover {
+            background-color: #f9b208;
+        }
+        
+        .ai-icon {
+            width: 16px;
+            height: 16px;
+        }
+        
+        .tooltip {
+            position: absolute;
+            background-color: #1a73e8;
+            color: white;
+            padding: 12px 16px;
+            border-radius: 4px;
+            font-size: 14px;
+            bottom: 90px;
+            right: 30px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            width: 300px;
+        }
+        
+        .tooltip-arrow {
+            position: absolute;
+            width: 0;
+            height: 0;
+            border-left: 8px solid transparent;
+            border-right: 8px solid transparent;
+            border-top: 8px solid #1a73e8;
+            bottom: -8px;
+            right: 20px;
+        }
+        
+        .dismiss-btn {
+            display: block;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 14px;
+            padding: 8px 0;
+            cursor: pointer;
+            text-align: center;
+            width: 100%;
+            margin-top: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="email-container">
+        <div class="email-header">
+            <div class="email-header-left">
+                <h3 class="email-title">New Message</h3>
+            </div>
+            <div class="email-header-right">
+                <button class="minimize-btn">−</button>
+                <button class="expand-btn">⤢</button>
+                <button class="close-btn">×</button>
+            </div>
+        </div>
+        
+        <div class="recipient-row">
+            <span class="recipient-label">To</span>
+            <input type="text" class="recipient-input" placeholder="">
+        </div>
+        
+        <div class="subject-row">
+            <span class="subject-label">Subject</span>
+            <input type="text" class="subject-input" placeholder="">
+        </div>
+        
+        <div class="email-body" contenteditable="true"></div>
+        
+        <div class="email-footer">
+            <div class="email-actions">
+                <button class="send-btn">Send</button>
+                <button class="send-options">▼</button>
+            </div>
+            
+            <div class="toolbar">
+                <button class="ai-assistant-btn">
+                    <svg class="ai-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <path d="M12 16v-4"></path>
+                        <path d="M12 8h.01"></path>
+                    </svg>
+                    AI Assistant
+                </button>
+                
+                <button class="toolbar-btn">
+                    <svg class="toolbar-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 3v15m0 0l-6.188-6.188M12 18l6.188-6.188"></path>
+                    </svg>
+                </button>
+                
+                <button class="toolbar-btn">
+                    <svg class="toolbar-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"></path>
+                        <polyline points="7 10 12 15 17 10"></polyline>
+                        <line x1="12" y1="15" x2="12" y2="3"></line>
+                    </svg>
+                </button>
+                
+                <button class="toolbar-btn">
+                    <svg class="toolbar-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"></path>
+                        <path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"></path>
+                    </svg>
+                </button>
+                
+                <button class="toolbar-btn">
+                    <svg class="toolbar-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <path d="M8 14s1.5 2 4 2 4-2 4-2"></path>
+                        <line x1="9" y1="9" x2="9.01" y2="9"></line>
+                        <line x1="15" y1="9" x2="15.01" y2="9"></line>
+                    </svg>
+                </button>
+                
+                <button class="toolbar-btn">
+                    <svg class="toolbar-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"></path>
+                        <line x1="7" y1="7" x2="7.01" y2="7"></line>
+                    </svg>
+                </button>
+                
+                <button class="toolbar-btn">
+                    <svg class="toolbar-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                        <line x1="16" y1="2" x2="16" y2="6"></line>
+                        <line x1="8" y1="2" x2="8" y2="6"></line>
+                        <line x1="3" y1="10" x2="21" y2="10"></line>
+                    </svg>
+                </button>
+                
+                <button class="toolbar-btn">
+                    <svg class="toolbar-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 5v14"></path>
+                        <path d="M5 12h14"></path>
+                    </svg>
+                </button>
+                
+                <button class="toolbar-btn">
+                    <svg class="toolbar-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="1"></circle>
+                        <circle cx="19" cy="12" r="1"></circle>
+                        <circle cx="5" cy="12" r="1"></circle>
+                    </svg>
+                </button>
+                
+                <button class="toolbar-btn delete-btn">
+                    <svg class="toolbar-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="3 6 5 6 21 6"></polyline>
+                        <path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const dismissBtn = document.querySelector('.dismiss-btn');
+            if (dismissBtn) {
+                dismissBtn.addEventListener('click', function() {
+                    const tooltip = document.querySelector('.tooltip');
+                    if (tooltip) tooltip.style.display = 'none';
+                });
+            }
+
+            // Add functionality to close button
+            const closeBtn = document.querySelector('.close-btn');
+            if (closeBtn) {
+                closeBtn.addEventListener('click', function() {
+                    alert('Close compose window');
+                });
+            }
+
+            // Only add one event listener for the AI Assistant button
+            const aiBtn = document.querySelector('.ai-assistant-btn');
+            if (aiBtn) {
+                aiBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    window.location.href = 'chat.html';
+                });
+            }
+        });
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const suggestion = localStorage.getItem('ai_suggestion');
+            if (suggestion) {
+                document.querySelector('.subject-input').value = suggestion;
+                localStorage.removeItem('ai_suggestion');
+            }
+        });
+    </script>
+</body>
+</html>

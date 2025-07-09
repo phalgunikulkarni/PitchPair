@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>PitchPair</title>
+  <style>
+    /* Inherits same style structure as Brand Form */
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f5f7fa;
+        color: #333;
+    }
+    .container {
+        max-width: 1000px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+    .header {
+        text-align: center;
+        margin-bottom: 30px;
+        padding: 20px 0;
+        background-color: #4257f5;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        color: white;
+    }
+    .header h1 {
+        color: white;
+        margin-bottom: 10px;
+    }
+    .form-container {
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        padding: 30px;
+    }
+    .form-group {
+        margin-bottom: 20px;
+    }
+    .form-group label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 600;
+        color: #2c3e50;
+    }
+    .form-control {
+        width: 100%;
+        padding: 12px 15px;
+        font-size: 16px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        transition: border-color 0.3s;
+    }
+    .form-control:focus {
+        border-color: #4257f5;
+        outline: none;
+        box-shadow: 0 0 0 2px rgba(66, 87, 245, 0.2);
+    }
+    .btn-submit {
+        background-color: #8e44ad;
+        color: white;
+        border: none;
+        padding: 14px 20px;
+        font-size: 16px;
+        border-radius: 4px;
+        cursor: pointer;
+        width: 100%;
+        font-weight: 600;
+        transition: background-color 0.3s;
+    }
+    .btn-submit:hover {
+        background-color: #7d3c98;
+    }
+    .section-title {
+        margin-top: 30px;
+        margin-bottom: 15px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid #e0e0e0;
+        color: #2c3e50;
+        font-size: 18px;
+        font-weight: 600;
+    }
+    .required-field::after {
+        content: "*";
+        color: red;
+        margin-left: 4px;
+    }
+    .error-message {
+        color: #e74c3c;
+        font-size: 14px;
+        margin-top: 5px;
+        display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>Complete Your Influencer Profile</h1>
+      <p>Help brands discover you and understand your audience better</p>
+    </div>
+
+    <div class="form-container">
+      <form id="influencerProfileForm">
+        <!-- Profile Picture Upload -->
+        <div class="form-group">
+          <label for="profilePicture">Profile Picture</label>
+          <input type="file" class="form-control" id="profilePicture" accept="image/*" />
+        </div>
+
+        <!-- Basic Information -->
+        <div class="form-group">
+          <label for="fullName" class="required-field">Full Name</label>
+          <input type="text" class="form-control" id="fullName" placeholder="Your full name" required />
+        </div>
+
+        <div class="form-group">
+          <label for="username" class="required-field">Influencer Handle / Username</label>
+          <input type="text" class="form-control" id="username" placeholder="@yourhandle" required />
+        </div>
+
+        <div class="form-group">
+          <label for="niche" class="required-field">Content Niche</label>
+          <select class="form-control" id="niche" required>
+            <option value="">Select your niche</option>
+            <option value="fashion">Fashion</option>
+            <option value="beauty">Beauty</option>
+            <option value="fitness">Fitness</option>
+            <option value="tech">Technology</option>
+            <option value="gaming">Gaming</option>
+            <option value="travel">Travel</option>
+            <option value="lifestyle">Lifestyle</option>
+            <option value="education">Education</option>
+            <option value="finance">Finance</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+
+        <!-- Social Media -->
+        <h3 class="section-title">Social Media Presence</h3>
+
+        <div class="form-group">
+          <label for="instagram">Instagram URL</label>
+          <input type="url" class="form-control" id="instagram" placeholder="https://instagram.com/yourprofile" />
+        </div>
+
+        <div class="form-group">
+          <label for="followers">Instagram Followers</label>
+          <input type="number" class="form-control" id="followers" placeholder="Number of followers" />
+        </div>
+
+        <div class="form-group">
+          <label for="youtube">YouTube Channel</label>
+          <input type="url" class="form-control" id="youtube" placeholder="https://youtube.com/yourchannel" />
+        </div>
+
+        <div class="form-group">
+          <label for="tiktok">TikTok Profile</label>
+          <input type="url" class="form-control" id="tiktok" placeholder="https://tiktok.com/@yourprofile" />
+        </div>
+
+        <div class="form-group">
+          <label for="website">Personal Website or Portfolio</label>
+          <input type="url" class="form-control" id="website" placeholder="https://yourportfolio.com" />
+        </div>
+
+        <!-- Content Style -->
+        <h3 class="section-title">About You</h3>
+        <div class="form-group">
+          <label for="bio">Short Bio</label>
+          <textarea class="form-control" id="bio" rows="4" placeholder="Tell brands about yourself, your content style, and what makes you unique..."></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="pastCollabs">Past Collaborations (optional)</label>
+          <textarea class="form-control" id="pastCollabs" rows="3" placeholder="Mention past brands you've worked with or campaigns you're proud of."></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="mediaKit">Upload Media Kit</label>
+          <input type="file" class="form-control" id="mediaKit" accept=".pdf,.doc,.docx" />
+        </div>
+
+        <!-- Preferences -->
+        <h3 class="section-title">Collaboration Preferences</h3>
+        <div class="form-group">
+          <label for="collabType">Type of Collaborations You're Interested In</label>
+          <select class="form-control" id="collabType">
+            <option value="">Select types</option>
+            <option value="sponsored">Sponsored Content</option>
+            <option value="affiliate">Affiliate Marketing</option>
+            <option value="ambassador">Brand Ambassador</option>
+            <option value="product-reviews">Product Reviews</option>
+            <option value="events">Event Promotion</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="preferredPlatform">Preferred Platform for Collaboration</label>
+          <input type="text" class="form-control" id="preferredPlatform" placeholder="Instagram, TikTok, YouTube..." />
+        </div>
+
+        <div class="form-group">
+          <label for="availability">Current Availability</label>
+          <textarea class="form-control" id="availability" rows="2" placeholder="Are you open to new collaborations right now?"></textarea>
+        </div>
+
+        <!-- Legal Agreement -->
+        <div class="form-group">
+          <input type="checkbox" id="legalConfirm" required />
+          <label for="legalConfirm" class="required-field">I confirm that the above information is accurate and my social profiles are genuine.</label>
+        </div>
+
+        <!-- Submit -->
+        <button type="submit" class="btn-submit">Save & Continue</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // Minimal validation
+    document.getElementById('influencerProfileForm').addEventListener('submit', function (e) {
+      e.preventDefault();
+      alert('Influencer profile submitted successfully!');
+      // In production: send data to backend or redirect
+    });
+  </script>
+</body>
+</html>
+
+

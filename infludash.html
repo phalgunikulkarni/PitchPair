@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PitchPair</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --nice-purple: #7209b7;
+            --soft-purple: rgba(114, 9, 183, 0.1);
+            --darkish-text: #333333;
+            --lightish-text: #666666;
+            --thin-line: #dee2e6;
+            --light-paper: #f8f9fa;
+            --pure-white: #ffffff;
+            --info-blue: #4cc9f0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--light-paper);
+            color: var(--darkish-text);
+        }
+
+        .page-shell {
+            max-width: 1400px;
+            margin: 20px auto;
+        }
+
+        .main-window {
+            display: flex;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Header styles */
+        .top-bar {
+            background-color: var(--nice-purple);
+            color: var(--pure-white);
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .site-title {
+            font-weight: bold;
+            font-size: 20px;
+        }
+
+        .user-area {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .profile-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.2);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+        }
+
+        /* Sidebar styles */
+        .side-menu {
+            width: 260px;
+            background-color: var(--pure-white);
+            height: calc(100vh - 80px);
+            border-right: 1px solid var(--thin-line);
+        }
+
+        .menu-option {
+            padding: 15px 25px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--lightish-text);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .menu-option:hover {
+            background-color: var(--soft-purple);
+            color: var(--nice-purple);
+        }
+
+        .menu-option.active {
+            background-color: var(--soft-purple);
+            color: var(--darkish-text);
+            border-left: 3px solid var(--nice-purple);
+        }
+
+        .menu-option i {
+            width: 20px;
+        }
+
+        /* Main content styles */
+        .main-view {
+            flex: 1;
+            background-color: var(--pure-white);
+            padding: 20px 30px;
+            overflow-y: auto;
+            height: calc(100vh - 80px);
+        }
+
+        .greeting-header {
+            margin-bottom: 30px;
+        }
+
+        .greeting-header h1 {
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+
+        .greeting-header p {
+            color: var(--lightish-text);
+        }
+
+        /* Stats cards */
+        .stat-blocks {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-box {
+            flex: 1;
+            background-color: var(--pure-white);
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .stat-box .label-text {
+            color: var(--lightish-text);
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        .stat-box .data-value {
+            font-size: 28px;
+            font-weight: bold;
+            color: var(--nice-purple);
+        }
+
+        /* Charts */
+        .charts-area {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .chart-holder {
+            background-color: var(--pure-white);
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .chart-holder h2 {
+            font-size: 16px;
+            margin-bottom: 15px;
+        }
+
+        .chart-area {
+            flex: 2;
+        }
+
+        .graph-display {
+            height: 250px;
+            background-color: var(--light-paper);
+            border-radius: 4px;
+            position: relative;
+        }
+
+        /* Line chart with SVG */
+        .performance-graph {
+            position: relative;
+            height: 100%;
+            width: 100%;
+        }
+
+        .performance-line {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            stroke: var(--nice-purple);
+            stroke-width: 3px;
+            stroke-linecap: round;
+            fill: none;
+        }
+
+        .data-point {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background-color: var(--nice-purple);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        /* Brand offers */
+        .offers-section {
+            flex: 1;
+        }
+
+        .offer-card {
+            display: flex;
+            padding: 15px 10px;
+            background-color: var(--light-paper);
+            border-radius: 4px;
+            margin-bottom: 10px;
+            align-items: center;
+        }
+
+        .brand-logo {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background-color: var(--thin-line);
+            margin-right: 10px;
+        }
+
+        .brand-details {
+            flex: 1;
+        }
+
+        .brand-name {
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .offer-info {
+            font-size: 12px;
+            color: var(--lightish-text);
+        }
+
+        /* Payments table */
+        .payment-summary {
+            background-color: var(--pure-white);
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+
+        .payment-summary h2 {
+            font-size: 16px;
+            margin-bottom: 15px;
+        }
+
+        .payment-item {
+            display: flex;
+            padding: 15px 0;
+            border-top: 1px solid var(--thin-line);
+        }
+
+        .payment-item .detail {
+            flex: 1;
+        }
+
+        .payment-item .status {
+            color: var(--info-blue);
+        }
+    </style>
+</head>
+<body>
+    <div class="page-shell">
+        <header class="top-bar">
+            <div class="site-title">Digital Manager</div>
+            <div class="user-area">
+                <span>Creator Account</span>
+                <div class="profile-icon">C</div>
+            </div>
+        </header>
+
+        <div class="main-window">
+            <aside class="side-menu">
+                <div class="menu-option active">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Overview</span>
+                </div>
+                <div class="menu-option" onclick="window.location.href='influprofile.html'">
+                    <i class="fas fa-user"></i>
+                    <span>My Profile</span>
+                </div>
+                <div class="menu-option" onclick="window.location.href='brandoffers.html'">
+                    <i class="fas fa-handshake"></i>
+                    <span>Brand Offers</span>
+                </div>
+                <div class="menu-option">
+                    <i class="fas fa-clipboard-list"></i>
+                    <span>Past Gigs</span>
+                </div>
+                <div class="menu-option">
+                    <i class="fas fa-star"></i>
+                    <span>Starred Brands</span>
+                </div>
+                <div class="menu-option">
+                    <i class="fas fa-dollar-sign"></i>
+                    <span>Money Matters</span>
+                </div>
+                <div class="menu-option" onclick="window.location.href='inbox.html'">
+                    <i class="fas fa-envelope"></i>
+                    <span>Messages</span>
+                </div>
+
+                <div class="menu-option">
+                    <i class="fas fa-bell"></i>
+                    <span>Notifications</span>
+                </div>
+
+                <div class="menu-option">
+                    <i class="fas fa-history"></i>
+                    <span>Payment History</span>
+                </div>
+                
+                <div class="menu-option" style="margin-top: auto;"onclick="window.location.href='influsettings.html'">
+                    <i class="fas fa-cog"></i>
+                    <span>Settings</span>
+                </div>
+            </aside>
+
+            <main class="main-view">
+                <div class="greeting-header">
+                    <h1>Hey, Creator Name!</h1>
+                    <p>Your latest stats and earnings are right here.</p>
+                </div>
+
+                <div class="stat-blocks">
+                    <div class="stat-box">
+                        <div class="label-text">Active Campaigns</div>
+                        <div class="data-value">2</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="label-text">This Month's Earnings</div>
+                        <div class="data-value">$8,450</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="label-text">Payments on the Way</div>
+                        <div class="data-value">$3,200</div>
+                    </div>
+                </div>
+
+                <div class="charts-area">
+                    <div class="chart-holder chart-area">
+                        <h2>Content Performance</h2>
+                        <div class="graph-display">
+                            <div class="performance-graph">
+                                <svg width="100%" height="100%" viewBox="0 0 500 250">
+                                    <path class="performance-line" d="M0,200 Q50,150 100,180 T200,120 T300,160 T400,90 T500,130"></path>
+                                    <circle cx="0" cy="200" r="4" fill="var(--nice-purple)"></circle>
+                                    <circle cx="100" cy="180" r="4" fill="var(--nice-purple)"></circle>
+                                    <circle cx="200" cy="120" r="4" fill="var(--nice-purple)"></circle>
+                                    <circle cx="300" cy="160" r="4" fill="var(--nice-purple)"></circle>
+                                    <circle cx="400" cy="90" r="4" fill="var(--nice-purple)"></circle>
+                                    <circle cx="500" cy="130" r="4" fill="var(--nice-purple)"></circle>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="chart-holder offers-section">
+                        <h2>New Offers from Brands</h2>
+                        <div class="offer-card">
+                            <div class="brand-logo"></div>
+                            <div class="brand-details">
+                                <div class="brand-name">Brand Name 1</div>
+                                <div class="offer-info">Fashion Campaign • $3,000</div>
+                            </div>
+                        </div>
+                        <div class="offer-card">
+                            <div class="brand-logo"></div>
+                            <div class="brand-details">
+                                <div class="brand-name">Brand Name 2</div>
+                                <div class="offer-info">Product Review • $1,500</div>
+                            </div>
+                        </div>
+                        <div class="offer-card">
+                            <div class="brand-logo"></div>
+                            <div class="brand-details">
+                                <div class="brand-name">Brand Name 3</div>
+                                <div class="offer-info">Summer Collection • $2,200</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="payment-summary">
+                    <h2>Upcoming Payments</h2>
+                    <div class="payment-item">
+                        <div class="detail">Brand Name 1 - Spring Collection</div>
+                        <div class="detail">$2,800</div>
+                        <div class="detail status">Processing</div>
+                    </div>
+                    <div class="payment-item">
+                        <div class="detail">Brand Name 2 - Social Media Posts</div>
+                        <div class="detail">$1,200</div>
+                        <div class="detail status">Due in 5 days</div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+</body>
+</html>

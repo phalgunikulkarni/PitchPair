@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Messaging Dashboard - Digital Manager</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+       
+        body {
+            background-color: #f8fafd;
+            color: #333;
+        }
+       
+        .dashboard-container {
+            display: flex;
+            min-height: 100vh;
+        }
+       
+        .sidebar {
+            width: 240px;
+            background-color: #1a2942;
+            color: #fff;
+            padding: 20px 0;
+            display: flex;
+            flex-direction: column;
+        }
+       
+        .logo {
+            padding: 0 20px 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+       
+        .logo-icon {
+            font-size: 24px;
+            color: #4cceac;
+        }
+       
+        .logo-text {
+            font-size: 18px;
+            font-weight: 600;
+        }
+       
+        .nav-menu {
+            list-style: none;
+            padding: 0;
+        }
+       
+        .nav-item {
+            padding: 12px 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: background-color 0.3s;
+        }
+       
+        .nav-item:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+       
+        .nav-item.active {
+            background-color: rgba(255, 255, 255, 0.15);
+            border-left: 4px solid #4cceac;
+        }
+       
+        .nav-icon {
+            font-size: 18px;
+            width: 24px;
+            text-align: center;
+        }
+       
+        .main-content {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+        }
+       
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+       
+        .page-title {
+            font-size: 24px;
+            font-weight: 600;
+            color: #1a2942;
+        }
+       
+        .header-actions {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+       
+        .search-bar {
+            position: relative;
+            margin-right: 12px;
+        }
+       
+        .search-input {
+            padding: 8px 12px 8px 36px;
+            border-radius: 20px;
+            border: 1px solid #ddd;
+            width: 240px;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+       
+        .search-input:focus {
+            border-color: #4cceac;
+        }
+       
+        .search-icon {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #888;
+        }
+       
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+        }
+       
+        .user-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background-color: #4cceac;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+        }
+       
+        .button {
+            padding: 10px 20px;
+            border-radius: 6px;
+            border: none;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: background-color 0.3s;
+        }
+       
+        .primary-button {
+            background-color: #4cceac;
+            color: white;
+        }
+       
+        .primary-button:hover {
+            background-color: #3bbd9b;
+        }
+       
+        .outline-button {
+            background-color: transparent;
+            border: 1px solid #ddd;
+            color: #555;
+        }
+       
+        .outline-button:hover {
+            background-color: #f5f5f5;
+        }
+       
+        .messaging-container {
+            display: flex;
+            gap: 24px;
+            height: calc(100vh - 140px);
+        }
+       
+        .message-sidebar {
+            width: 300px;
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            display: flex;
+            flex-direction: column;
+        }
+       
+        .message-header {
+            padding: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #eee;
+        }
+       
+        .message-title {
+            font-size: 18px;
+            font-weight: 600;
+        }
+       
+        .filter-dropdown {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 14px;
+            color: #666;
+            cursor: pointer;
+        }
+       
+        .message-search {
+            padding: 12px 16px;
+            border-bottom: 1px solid #eee;
+        }
+       
+        .message-search-input {
+            width: 100%;
+            padding: 8px 12px 8px 36px;
+            border-radius: 20px;
+            border: 1px solid #ddd;
+            font-size: 14px;
+            outline: none;
+        }
+       
+        .message-list {
+            overflow-y: auto;
+            flex: 1;
+        }
+       
+        .message-item {
+            padding: 16px;
+            border-bottom: 1px solid #eee;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+       
+        .message-item:hover {
+            background-color: #f5f7fa;
+        }
+       
+        .message-item.active {
+            background-color: #ebf7f4;
+            border-left: 3px solid #4cceac;
+        }
+       
+        .contact-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background-color: #e0e0e0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            color: #555;
+            flex-shrink: 0;
+        }
+       
+        .message-content {
+            flex: 1;
+            min-width: 0;
+        }
+       
+        .message-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 4px;
+        }
+       
+        .contact-name {
+            font-weight: 600;
+            font-size: 15px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+       
+        .message-time {
+            font-size: 12px;
+            color: #888;
+            flex-shrink: 0;
+        }
+       
+        .message-preview {
+            font-size: 13px;
+            color: #666;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            line-height: 1.4;
+        }
+       
+        .unread-message .contact-name,
+        .unread-message .message-preview {
+            font-weight: 600;
+            color: #333;
+        }
+       
+        .unread-badge {
+            background-color: #4cceac;
+            color: white;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            font-weight: 600;
+            margin-left: 8px;
+        }
+       
+        .message-placeholder {
+            flex: 1;
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+       
+        .placeholder-icon {
+            font-size: 64px;
+            color: #ddd;
+            margin-bottom: 24px;
+        }
+       
+        .placeholder-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 12px;
+        }
+       
+        .placeholder-description {
+            font-size: 15px;
+            max-width: 400px;
+            margin-bottom: 24px;
+            line-height: 1.6;
+        }
+       
+        .tag {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+            margin-left: 8px;
+        }
+       
+        .tag-brand {
+            background-color: #e3f2fd;
+            color: #1976d2;
+        }
+       
+        .tag-creator {
+            background-color: #e8f5e9;
+            color: #388e3c;
+        }
+       
+        .ai-suggestion {
+            padding: 16px;
+            background-color: #fff8e1;
+            border-left: 3px solid #ffc107;
+            margin-top: 24px;
+            border-radius: 8px;
+        }
+       
+        .ai-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+       
+        .ai-icon {
+            color: #ffa000;
+            font-size: 20px;
+        }
+       
+        .ai-title {
+            font-weight: 600;
+            color: #333;
+        }
+       
+        .ai-suggestions-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+       
+        .ai-suggestion-item {
+            background-color: white;
+            border: 1px solid #eee;
+            padding: 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+       
+        .ai-suggestion-item:hover {
+            border-color: #ffc107;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+       
+        .ai-suggestion-title {
+            font-weight: 600;
+            margin-bottom: 4px;
+            font-size: 14px;
+        }
+       
+        .ai-suggestion-preview {
+            font-size: 13px;
+            color: #666;
+            line-height: 1.4;
+        }
+       
+        /* Responsive design */
+        @media (max-width: 1024px) {
+            .sidebar {
+                width: 80px;
+            }
+           
+            .logo-text, .nav-text {
+                display: none;
+            }
+           
+            .nav-item {
+                justify-content: center;
+                padding: 16px 0;
+            }
+           
+            .nav-icon {
+                margin: 0;
+            }
+           
+            .message-sidebar {
+                width: 280px;
+            }
+        }
+       
+        @media (max-width: 768px) {
+            .messaging-container {
+                flex-direction: column;
+                height: auto;
+            }
+           
+            .message-sidebar {
+                width: 100%;
+                max-height: 400px;
+            }
+           
+            .message-placeholder {
+                padding: 20px;
+                margin-top: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar Navigation -->
+        <div class="sidebar">
+            <div class="logo">
+                <div class="logo-icon">💼</div>
+                <div class="logo-text">Digital Manager</div>
+            </div>
+           
+            <ul class="nav-menu">
+                <li class="nav-item active">
+                    <div class="nav-icon">✉️</div>
+                    <div class="nav-text">Messages</div>
+                </li>
+                <li class="nav-item">
+                    <div class="nav-icon">⚙️</div>
+                    <div class="nav-text">Settings</div>
+                </li>
+            </ul>
+        </div>
+       
+        <!-- Main Content Area -->
+        <div class="main-content">
+            <!-- Header -->
+            <div class="header">
+                <h1 class="page-title">Messages</h1>
+               
+                <div class="header-actions">
+                    <div class="search-bar">
+                        <span class="search-icon">🔍</span>
+                        <input type="text" class="search-input" placeholder="Search...">
+                    </div>
+                   
+                    <button class="button primary-button" onclick=""window.location.href='message.html'"">
+                        <span>✉️</span>
+                        <span>Compose</span>
+                    </button>
+                   
+                    <div class="user-profile">
+                        <div class="user-avatar">JS</div>
+                    </div>
+                </div>
+            </div>
+           
+            <!-- Messaging Area -->
+            <div class="messaging-container">
+                <!-- Message Sidebar -->
+                <div class="message-sidebar">
+                    <div class="message-header">
+                        <h2 class="message-title">Inbox</h2>
+                        <div class="filter-dropdown">
+                            <span>All Messages</span>
+                            <span>▼</span>
+                        </div>
+                    </div>
+                   
+                    <div class="message-search">
+                        <div class="search-bar" style="width: 100%; margin: 0;">
+                            <span class="search-icon">🔍</span>
+                            <input type="text" class="message-search-input" placeholder="Search messages...">
+                        </div>
+                    </div>
+                   
+                    <div class="message-list">
+                        <div style="padding: 40px 20px; text-align: center; color: #888;">
+                            <div style="font-size: 64px; margin-bottom: 16px;">📭</div>
+                            <p style="font-size: 16px; font-weight: 500;">No messages in the inbox</p>
+                            <p style="font-size: 14px; margin-top: 8px;">Your inbox is empty. Start a conversation by clicking the compose button.</p>
+                        </div>
+                    </div>
+                </div>
+               
+                <!-- Message Content Placeholder -->
+                <div class="message-placeholder">
+                    <div class="placeholder-icon">✉️</div>
+                    <h3 class="placeholder-title">Select a conversation</h3>
+                    <p class="placeholder-description">Choose a conversation from the list or start a new one by clicking the Compose button above.</p>
+                   
+                    <button class="button primary-button" onclick="window.location.href='message.html'">
+                        <span>✉️</span>
+                        <span>Compose New Message</span>
+                    </button>
+                   
+                    <div class="ai-suggestion">
+                        <div class="ai-header">
+                            <div class="ai-icon">💡</div>
+                            <div class="ai-title">AI Assistant Suggestions</div>
+                        </div>
+                       
+                        <div class="ai-suggestions-list">
+                            <div class="ai-suggestion-item">
+                                <div class="ai-suggestion-title">Follow up on overdue payments</div>
+                                <div class="ai-suggestion-preview">Our system detected 3 overdue payments. Would you like to send automatic payment reminders?</div>
+                            </div>
+                           
+                            <div class="ai-suggestion-item">
+                                <div class="ai-suggestion-title">Respond to collaboration proposals</div>
+                                <div class="ai-suggestion-preview">You have 5 unread collaboration proposals. Our AI can help draft personalized responses.</div>
+                            </div>
+                           
+                            <div class="ai-suggestion-item">
+                                <div class="ai-suggestion-title">Campaign update templates</div>
+                                <div class="ai-suggestion-preview">Send professional campaign progress updates to your clients with AI-generated templates.</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        // Add click event to compose buttons
+        document.querySelectorAll('.primary-button').forEach(button => {
+            button.addEventListener('click', function() {
+                // Open compose window
+                window.location.href = 'message.html';
+            });
+        });
+       
+        // Add click event to AI suggestions
+        document.querySelectorAll('.ai-suggestion-item').forEach(item => {
+            item.addEventListener('click', function() {
+                // Pass suggestion to message.html via localStorage
+                const suggestion = item.querySelector('.ai-suggestion-title').innerText;
+                localStorage.setItem('ai_suggestion', suggestion);
+                window.location.href = 'message.html';
+            });
+        });
+    </script>
+</body>
+</html>
+

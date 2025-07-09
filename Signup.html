@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>PitchPair - Create Account</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .signup-container {
+      width: 100%;
+      max-width: 450px;
+      margin: 20px;
+      background: rgba(255, 255, 255, 0.95);
+      color: #333;
+      padding: 40px;
+      border-radius: 16px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+      backdrop-filter: blur(10px);
+    }
+
+    .signup-header {
+      text-align: center;
+      margin-bottom: 35px;
+    }
+
+    .signup-header h2 {
+      color: #1a1a1a;
+      font-size: 28px;
+      font-weight: 600;
+      margin: 0 0 8px;
+    }
+
+    .signup-header p {
+      color: #666;
+      font-size: 15px;
+      margin: 0;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+      position: relative;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      color: #4a4a4a;
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 12px 16px;
+      border: 2px solid #e1e1e1;
+      border-radius: 8px;
+      font-size: 15px;
+      color: #333;
+      transition: all 0.3s ease;
+      background: white;
+    }
+
+    .form-group input:focus {
+      border-color: #2a5298;
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(42,82,152,0.1);
+    }
+
+    .form-group .error-message {
+      display: none;
+      color: #dc2626;
+      font-size: 13px;
+      margin-top: 6px;
+    }
+
+    .form-group.error input {
+      border-color: #dc2626;
+    }
+
+    .form-group.error .error-message {
+      display: block;
+    }
+
+    .password-strength {
+      margin-top: 6px;
+      height: 4px;
+      background: #e1e1e1;
+      border-radius: 2px;
+      overflow: hidden;
+    }
+
+    .password-strength-bar {
+      height: 100%;
+      width: 0;
+      transition: all 0.3s ease;
+    }    .signup-button {
+      width: 100%;
+      background-color: #2a5298;
+      color: white;
+      border: none;
+      padding: 14px;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-top: 10px;
+    }
+
+    .signup-button:hover {
+      background-color: #1e3c72;
+      transform: translateY(-1px);
+    }
+
+    .signup-button:active {
+      transform: translateY(1px);
+    }
+
+    .signup-button:disabled {
+      background-color: #93a8cc;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .alternate-actions {
+      text-align: center;
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 1px solid #e1e1e1;
+    }
+
+    .alternate-actions p {
+      color: #666;
+      font-size: 14px;
+      margin: 0 0 8px;
+    }
+
+    .alternate-actions a {
+      color: #2a5298;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .alternate-actions a:hover {
+      text-decoration: underline;
+    }
+
+    .loading {
+      position: relative;
+      pointer-events: none;
+    }
+
+    .loading::after {
+      content: '';
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      top: 50%;
+      left: 50%;
+      margin: -10px 0 0 -10px;
+      border: 2px solid rgba(255,255,255,0.3);
+      border-radius: 50%;
+      border-top-color: white;
+      animation: spin 0.8s infinite linear;
+    }    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    @keyframes slideIn {
+      from {
+        transform: translateX(100%);
+        opacity: 0;
+      }
+      to {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
+
+    .success-toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background-color: #10b981;
+      color: white;
+      padding: 16px 24px;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      display: flex;
+      align-items: center;
+      animation: slideIn 0.3s ease forwards;
+    }
+
+    .success-content {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .success-content svg {
+      flex-shrink: 0;
+    }
+
+    .success-content span {
+      font-weight: 500;
+    }
+  </style>
+</head>
+<body>
+  <div class="signup-container">
+    <div class="signup-header">
+      <h2>Create Your Account</h2>
+      <p>Join the platform to connect with brands and creators</p>
+    </div>
+
+    <form id="signup-form" novalidate>
+      <div class="form-group">
+        <label for="username">Username</label>
+        <input type="text" id="username" required />
+        <div class="error-message"></div>
+      </div>
+
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" id="email" required />
+        <div class="error-message"></div>
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" required />
+        <div class="password-strength">
+          <div class="password-strength-bar"></div>
+        </div>
+        <div class="error-message"></div>
+      </div>
+
+      <div class="form-group">
+        <label for="confirm-password">Confirm Password</label>
+        <input type="password" id="confirm-password" required />
+        <div class="error-message"></div>
+      </div>      <div class="form-group">
+        <button type="submit" class="signup-button">Create Account</button>
+      </div>
+    </form>
+
+    <div class="alternate-actions" onclick="window.location.href='signin.html'">
+      <p>Already have an account? <a href="signin.html">Sign in</a></p>
+    </div>
+  </div>
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+  <script>
+    // Initialize Firebase
+    const firebaseConfig = {
+      apiKey: "AIzaSyCibzI6I27sUFMoT-EdIlyK37lXsUBPY18",
+      authDomain: "pitchpair.firebaseapp.com",
+      projectId: "pitchpair",
+      storageBucket: "pitchpair.firebasestorage.app",
+      messagingSenderId: "674714879785",
+      appId: "1:674714879785:web:95a2dd31d0630cb7d7d938",
+      measurementId: "G-NYDM6K408F"
+    };
+
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+  </script>
+  <script type="module">
+    import authService from './js/auth.js';
+
+    const form = document.getElementById('signup-form');
+    const passwordInput = document.getElementById('password');
+    const confirmPasswordInput = document.getElementById('confirm-password');
+    const strengthBar = document.querySelector('.password-strength-bar');
+
+    // Password strength checker
+    function checkPasswordStrength(password) {
+      let strength = 0;
+      const patterns = [
+        /[a-z]+/, // lowercase
+        /[A-Z]+/, // uppercase
+        /[0-9]+/, // numbers
+        /[^A-Za-z0-9]+/, // special chars
+        /.{8,}/ // length
+      ];
+
+      patterns.forEach(pattern => {
+        if (pattern.test(password)) strength++;
+      });
+
+      const colors = ['#dc2626', '#f59e0b', '#10b981'];
+      const widths = ['33%', '66%', '100%'];
+
+      strengthBar.style.width = widths[Math.floor(strength/2)];
+      strengthBar.style.backgroundColor = colors[Math.floor(strength/2)];
+
+      return strength;
+    }
+
+    // Real-time validation
+    const inputs = form.querySelectorAll('input');
+    inputs.forEach(input => {
+      input.addEventListener('input', (e) => {
+        const field = e.target;
+        const group = field.closest('.form-group');
+        const error = group.querySelector('.error-message');
+
+        // Clear previous error state
+        group.classList.remove('error');
+        error.textContent = '';
+
+        if (field.id === 'password') {
+          checkPasswordStrength(field.value);
+        }
+
+        if (field.id === 'confirm-password') {
+          if (field.value !== passwordInput.value) {
+            group.classList.add('error');
+            error.textContent = 'Passwords do not match';
+          }
+        }
+
+        try {
+          const validation = authService.validateInput(field.id, field.value);
+          if (!validation.valid) {
+            group.classList.add('error');
+            error.textContent = validation.message;
+          }
+        } catch (err) {
+          // Ignore validation for confirm-password
+        }
+      });
+    });
+
+    form.addEventListener('submit', async function(e) {
+      e.preventDefault();
+      
+      const submitBtn = form.querySelector('button[type="submit"]');
+      const username = form.querySelector('#username').value;
+      const email = form.querySelector('#email').value;
+      const password = form.querySelector('#password').value;
+      const confirmPassword = form.querySelector('#confirm-password').value;
+
+      // Validate all inputs first
+      let hasErrors = false;
+      inputs.forEach(input => {
+        const group = input.closest('.form-group');
+        const error = group.querySelector('.error-message');
+        group.classList.remove('error');
+        error.textContent = '';
+
+        try {
+          if (input.id === 'confirm-password') {
+            if (input.value !== passwordInput.value) {
+              hasErrors = true;
+              group.classList.add('error');
+              error.textContent = 'Passwords do not match';
+            }
+          } else {
+            const validation = authService.validateInput(input.id, input.value);
+            if (!validation.valid) {
+              hasErrors = true;
+              group.classList.add('error');
+              error.textContent = validation.message;
+            }
+          }
+        } catch (err) {
+          // Ignore validation for confirm-password
+        }
+      });
+
+      if (hasErrors) return;
+
+      submitBtn.disabled = true;
+      submitBtn.classList.add('loading');
+      submitBtn.innerHTML = '<span class="loader"></span>';
+
+      try {
+        const result = await authService.signUp(username, email, password);
+        
+        // Show success toast
+        const successToast = document.createElement('div');
+        successToast.classList.add('success-toast');
+        successToast.innerHTML = `
+          <div class="success-content">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M10 0C4.48 0 0 4.48 0 10C0 15.52 4.48 20 10 20C15.52 20 20 15.52 20 10C20 4.48 15.52 0 10 0ZM8 15L3 10L4.41 8.59L8 12.17L15.59 4.58L17 6L8 15Z" fill="white"/>
+            </svg>
+            <span>Account created successfully!</span>
+          </div>
+        `;
+        document.body.appendChild(successToast);
+
+        // Redirect to joinas.html after showing success message
+        setTimeout(() => {
+          window.location.href = 'joinas.html';
+        }, 1500);
+
+      } catch (error) {
+        // Show error in the email form group since most Firebase auth errors are email-related
+        const group = form.querySelector('#email').closest('.form-group');
+        const errorEl = group.querySelector('.error-message');
+        group.classList.add('error');
+        errorEl.textContent = error.message;
+        
+        submitBtn.disabled = false;
+        submitBtn.classList.remove('loading'); 
+        submitBtn.textContent = 'Create Account';
+      }
+    });
+  </script></body>
+</html>

@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PitchPair - Tell Us About Your Brand</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f7fa;
+            color: #333;
+        }
+        .page-area {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .form-header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px 0;
+            background-color: #4257f5;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            color: white;
+        }
+        .form-header h1 {
+            color: white;
+            margin-bottom: 10px;
+        }
+        .form-header p {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 18px;
+        }
+        .profile-form {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 30px;
+        }
+        .field-group {
+            margin-bottom: 25px;
+        }
+        .field-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        .input-field {
+            width: 100%;
+            padding: 12px 15px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            transition: border-color 0.3s;
+        }
+        .input-field:focus {
+            border-color: #4257f5;
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(66, 87, 245, 0.2);
+        }
+        .industry-dropdown {
+            height: 45px;
+        }
+        .submit-button {
+            background-color: #8e44ad;
+            color: white;
+            border: none;
+            padding: 14px 20px;
+            font-size: 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+            font-weight: 600;
+            transition: background-color 0.3s;
+        }
+        .submit-button:hover {
+            background-color: #7d3c98;
+        }
+        .logo-upload-area {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .logo-preview-box {
+            width: 150px;
+            height: 150px;
+            border: 2px dashed #ddd;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 15px;
+            overflow: hidden;
+        }
+        .logo-preview-box img {
+            max-width: 100%;
+            max-height: 100%;
+            display: none;
+        }
+        .upload-prompt {
+            background-color: #f1f1f1;
+            color: #555;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            font-size: 14px;
+        }
+        .upload-prompt:hover {
+            background-color: #e1e1e1;
+        }
+        #logo-file {
+            display: none;
+        }
+        .required::after {
+            content: "*";
+            color: red;
+            margin-left: 4px;
+        }
+        .error-message {
+            color: #e74c3c;
+            font-size: 14px;
+            margin-top: 5px;
+            display: none;
+        }
+        .section-heading {
+            margin-top: 35px;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #e0e0e0;
+            color: #2c3e50;
+            font-size: 18px;
+            font-weight: 600;
+        }
+        .checkbox-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px 20px;
+            margin-top: 10px;
+        }
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .checkbox-item input[type="checkbox"] {
+            margin-right: 8px;
+        }
+        .checkbox-item label {
+            margin-bottom: 0;
+            font-weight: normal;
+        }
+        .legal-info {
+            margin-top: 30px;
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 6px;
+            border-left: 4px solid #3498db;
+        }
+        .verification-check label {
+            color: #2c3e50;
+            font-weight: 600;
+        }
+        .important-note {
+            margin-top: 25px;
+            padding: 15px;
+            background-color: #e7f4ff;
+            border-radius: 6px;
+            border-left: 4px solid #3498db;
+        }
+        .important-note p {
+            margin: 0;
+            color: #2c3e50;
+            font-size: 14px;
+        }
+
+        .divider {
+            height: 1px;
+            background-color: #e0e0e0;
+            margin: 30px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="page-area">
+        <div class="form-header">
+            <h1>Tell Us About Your Brand</h1>
+            <p>Help influencers get to know your brand and what you stand for.</p>
+        </div>
+
+        <div class="profile-form">
+            <form id="brandInfoForm">
+                <div class="logo-upload-area">
+                    <div class="logo-preview-box" id="logoPreview">
+                        <img id="previewImg" src="" alt="Brand Logo Preview">
+                        <span id="uploadText">Upload Your Logo</span>
+                    </div>
+                    <label for="logo-file" class="upload-prompt">Choose Brand Logo</label>
+                    <input type="file" id="logo-file" accept="image/*">
+                </div>
+
+                <div class="field-group">
+                    <label for="brandName" class="required">Brand Name</label>
+                    <input type="text" class="input-field" id="brandName" placeholder="Enter your brand's name" required>
+                    <div class="error-message" id="brandNameError">This field is required.</div>
+                </div>
+
+                <div class="field-group">
+                    <label for="slogan">Brand Slogan/Tagline</label>
+                    <input type="text" class="input-field" id="slogan" placeholder="What's your catchy tagline?">
+                </div>
+
+                <div class="field-group">
+                    <label for="industry" class="required">Industry</label>
+                    <select class="input-field industry-dropdown" id="industry" required>
+                        <option value="">Select your industry</option>
+                        <option value="fashion">Fashion</option>
+                        <option value="tech">Technology</option>
+                        <option value="beauty">Beauty</option>
+                        <option value="health">Health & Wellness</option>
+                        <option value="food">Food & Beverage</option>
+                        <option value="travel">Travel</option>
+                        <option value="sports">Sports & Fitness</option>
+                        <option value="entertainment">Entertainment</option>
+                        <option value="gaming">Gaming</option>
+                        <option value="education">Education</option>
+                        <option value="home">Home & Lifestyle</option>
+                        <option value="automotive">Automotive</option>
+                        <option value="finance">Finance</option>
+                        <option value="other">Other</option>
+                    </select>
+                    <div class="error-message" id="industryError">Please tell us your industry.</div>
+                </div>
+
+                <div class="field-group">
+                    <label for="website" class="required">Official Website URL</label>
+                    <input type="url" class="input-field" id="website" placeholder="Your website address (e.g., https://yourbrand.com)" required>
+                    <div class="error-message" id="websiteError">Please enter a valid website URL.</div>
+                </div>
+
+                <div class="field-group">
+                    <label for="location" class="required">Location (City/Country)</label>
+                    <input type="text" class="input-field" id="location" placeholder="Where are you based? (e.g., London, UK)" required>
+                    <div class="error-message" id="locationError">We need to know your location.</div>
+                </div>
+
+                <div class="field-group">
+                    <label for="address">Full Address</label>
+                    <textarea class="input-field" id="address" rows="3" placeholder="Your full business address"></textarea>
+                </div>
+
+                <div class="field-group">
+                    <label for="description">Brand Description</label>
+                    <textarea class="input-field" id="description" rows="5" placeholder="Describe your brand, your products, and what makes you special..."></textarea>
+                </div>
+
+
+                <h3 class="section-heading">Your Contact Person</h3>
+                <div class="field-group">
+                    <label for="contactName" class="required">Contact Person Name</label>
+                    <input type="text" class="input-field" id="contactName" placeholder="Who should influencers contact?" required>
+                    <div class="error-message" id="contactNameError">Please provide a contact name.</div>
+                </div>
+
+
+                <div class="field-group">
+                    <label for="contactEmail" class="required">Email Address</label>
+                    <input type="email" class="input-field" id="contactEmail" placeholder="Their email address (e.g., partnerships@yourbrand.com)" required>
+                    <div class="error-message" id="contactEmailError">Please enter a valid email.</div>
+                </div>
+
+
+                <div class="field-group">
+                    <label for="contactPhone">Phone Number</label>
+                    <input type="tel" class="input-field" id="contactPhone" placeholder="A contact phone number (e.g., +1 555-123-4567)">
+                </div>
+
+
+                <h3 class="section-heading">Connect Your Socials</h3>
+                <div class="field-group">
+                    <label for="instagram">Instagram</label>
+                    <input type="url" class="input-field" id="instagram" placeholder="Your Instagram link (e.g., https://instagram.com/yourbrand)">
+                </div>
+
+
+                <div class="field-group">
+                    <label for="twitter">Twitter</label>
+                    <input type="url" class="input-field" id="twitter" placeholder="Your Twitter link (e.g., https://twitter.com/yourbrand)">
+                </div>
+
+
+                <div class="field-group">
+                    <label for="linkedin">LinkedIn</label>
+                    <input type="url" class="input-field" id="linkedin" placeholder="Your LinkedIn link (e.g., https://linkedin.com/company/yourbrand)">
+                </div>
+
+
+                <div class="field-group">
+                    <label for="facebook">Facebook</label>
+                    <input type="url" class="input-field" id="facebook" placeholder="Your Facebook link (e.g., https://facebook.com/yourbrand)">
+                </div>
+
+
+                <h3 class="section-heading">Your Brand's Story</h3>
+                <div class="field-group">
+                    <label for="mission">Mission Statement</label>
+                    <textarea class="input-field" id="mission" rows="3" placeholder="What drives your brand every day?"></textarea>
+                </div>
+
+
+                <div class="field-group">
+                    <label for="vision">Vision Statement</label>
+                    <textarea class="input-field" id="vision" rows="3" placeholder="Where do you see your brand in the future?"></textarea>
+                </div>
+
+
+                <div class="field-group">
+                    <label for="story">Brand Journey</label>
+                    <textarea class="input-field" id="story" rows="5" placeholder="Tell us how your brand started and the journey so far..."></textarea>
+                </div>
+
+
+                <h3 class="section-heading">Collaboration Preferences</h3>
+                <div class="field-group">
+                    <label>Types of Collaborations You're Interested In</label>
+                    <div class="checkbox-list">
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="sponsored" name="collabType" value="sponsored">
+                            <label for="sponsored">Sponsored Posts</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="ambassador" name="collabType" value="ambassador">
+                            <label for="ambassador">Brand Ambassadorships</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="affiliate" name="collabType" value="affiliate">
+                            <label for="affiliate">Affiliate Marketing</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="reviews" name="collabType" value="reviews">
+                            <label for="reviews">Product Reviews</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="events" name="collabType" value="events">
+                            <label for="events">Event Promotions</label>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="field-group">
+                    <label for="influencerSize">Preferred Influencer Audience Size</label>
+                    <select class="input-field" id="influencerSize">
+                        <option value="">Select preferred size</option>
+                        <option value="nano">Nano (1K-10K followers)</option>
+                        <option value="micro">Micro (10K-50K followers)</option>
+                        <option value="mid">Mid-tier (50K-500K followers)</option>
+                        <option value="macro">Macro (500K-1M followers)</option>
+                        <option value="mega">Mega (1M+ followers)</option>
+                        <option value="all">All sizes welcome</option>
+                    </select>
+                </div>
+
+
+                <div class="field-group">
+                    <label for="budget">Typical Budget for a Collaboration</label>
+                    <select class="input-field" id="budget">
+                        <option value="">Select your typical budget</option>
+                        <option value="product">Product exchange only</option>
+                        <option value="low">Rs.100-Rs.500 per collab</option>
+                        <option value="medium">Rs.500-Rs.2,000 per collab</option>
+                        <option value="high">Rs.2,000-Rs.10,000 per collab</option>
+                        <option value="premium">Rs.10,000+ per collab</option>
+                        <option value="variable">Varies depending on the project</option>
+                    </select>
+                </div>
+
+
+                <div class="field-group">
+                    <label for="targetAudience">Ideal Influencer Audience</label>
+                    <textarea class="input-field" id="targetAudience" rows="3" placeholder="Describe the kind of audience you're hoping to reach (e.g., age, interests)"></textarea>
+                </div>
+
+
+                <div class="field-group">
+                    <label for="additionalPreferences">Anything Else?</label>
+                    <textarea class="input-field" id="additionalPreferences" rows="3" placeholder="Any other details or preferences for working with influencers?"></textarea>
+                </div>

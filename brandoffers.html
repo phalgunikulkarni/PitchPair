@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>PitchPair - Your Management Space</title>
+    <style>
+        /* make it easier for eyes */
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f7f7f7; /* light background */
+            line-height: 1.6;
+        }
+
+
+        .header {
+            background-color: #6c2eb9; /*friendly primary color */
+            color: white;
+            padding: 25px; /* Give the header some breathing room */
+            font-size: 28px; /* A clear, prominent title */
+            font-weight: bold;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* A subtle lift */
+        }
+
+
+        .sidebar {
+            width: 220px; /* A bit more spacious for comfort */
+            height: 100vh;
+            background-color: #fff;
+            border-right: 1px solid #ddd; /* A gentle separator */
+            position: fixed; /* Keep it in view as you scroll */
+            top: 0;
+            left: 0;
+            padding-top: 80px; /* Make space for the fixed header */
+        }
+
+
+        .sidebar a {
+            display: block;
+            padding: 14px 22px; /* More comfortable padding */
+            color: #333; /* A readable text color */
+            text-decoration: none; /* Keep links clean */
+            transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out, font-weight 0.2s ease-in-out; /* Smooth transitions for a nice feel */
+        }
+
+
+        .sidebar a:hover,
+        .sidebar a.active {
+            background-color: #eee; /* A light highlight on interaction */
+            color: #6c2eb9; /* Reinforce the primary color */
+            font-weight: bold; /* Make the active/hovered item stand out */
+        }
+
+
+        .main {
+            margin-left: 220px; /* Make space for the wider sidebar */
+            padding: 30px; /* Give the main content some room */
+        }
+
+
+        .card {
+            background-color: white;
+            padding: 25px; /* Comfortable padding inside the card */
+            border-radius: 12px; /* Soft, rounded corners */
+            box-shadow: 0 4px 8px rgba(0,0,0,0.08); /* A gentle shadow for depth */
+            margin-bottom: 25px; /* Space between cards */
+        }
+
+
+        .card h2 {
+            color: #6c2eb9;
+            margin-bottom: 15px; /*ond swalpa space*/
+            border-bottom: 2px solid #eee; 
+            padding-bottom: 10px;
+        }
+
+
+        .offer {
+            padding: 14px 0; /* Comfortable */
+            border-bottom: 1px solid #eee; /* light separator */
+            display: flex; /* Align title and amount nicely */
+            justify-content: space-between;
+            align-items: center;
+        }
+
+
+        .offer:last-child {
+            border-bottom: none; 
+        }
+
+
+        .offer-title {
+            font-weight: bold;
+            color: #444; /* onthara grey */
+        }
+
+
+        .offer-details {
+            color: #777; /* muted color */
+            margin-top: 6px; /* A little space below the title */
+            font-size: 0.9em; /* Slightly smaller for less emphasis */
+        }
+
+
+        .amount {
+            color: #6c2eb9;
+            font-weight: bold;
+            font-size: 1.1em; /* Make the amount stand out a bit more */
+        }
+    </style>
+</head>
+<body>
+
+
+    <div class="header">Your Digital Management Hub</div>
+
+
+    <div class="sidebar">
+        <a href="#">Your Dashboard</a>
+        <a href="#">Your Profile</a>
+        <a class="active" href="#">Explore Brand Offers</a>
+        <a href="#">Campaign Journey</a>
+        <a href="#">Your Saved Brands</a>
+        <a href="#">Financial Insights</a>
+        <a href="#">Your Messages</a>
+        <a href="#">Account Settings</a>
+    </div>
+
+
+    <div class="main">
+        <div class="card">
+            <h2>Discover Exciting Brand Collaborations</h2>
+
+
+            <div class="offer">
+                <div>
+                    <span class="offer-title">GlamStyle Fashion</span>
+                    <div class="offer-details">Opportunity for a Fashion Campaign</div>
+                </div>
+                <span class="amount">Rs.5,000</span>
+            </div>
+
+
+            <div class="offer">
+                <div>
+                    <span class="offer-title">TechSpark Gadgets</span>
+                    <div class="offer-details">Looking for a Product Review</div>
+                </div>
+                <span class="amount">Rs.1,500</span>
+            </div>
+
+
+            <div class="offer">
+                <div>
+                    <span class="offer-title">SunnyDays Resorts</span>
+                    <div class="offer-details">Collaboration for our Summer Collection</div>
+                </div>
+                <span class="amount">Rs.2,200</span>
+            </div>
+        </div>
+        {/* You could add more cards or content here */}
+    </div>
+
+
+</body>
+</html>

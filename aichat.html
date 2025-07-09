@@ -1,0 +1,126 @@
+<!-- Everything before the script remains same -->
+
+<script>
+    // Firebase config with magic credentials
+    const spellbook = {
+        apiKey: "AIzaSyCibzI6I27sUFMoT-EdIlyK37lXsUBPY18",
+        authDomain: "pitchpair.firebaseapp.com",
+        projectId: "pitchpair",
+        storageBucket: "pitchpair.firebasestorage.app",
+        messagingSenderId: "674714879785",
+        appId: "1:674714879785:web:95a2dd31d0630cb7d7d938",
+        measurementId: "G-NYDM6K408F"
+    };
+
+    // Light up the Firebase cauldron
+    const wizardPortal = firebase.initializeApp(spellbook);
+    const fireWand = firebase.auth();
+
+    fireWand.onAuthStateChanged((wandBearer) => {
+        if (!wandBearer) {
+            console.log('No magic user. Sending to muggle land...');
+            portalHopper('signin.html');
+        } else {
+            console.log('Sorcerer logged in:', wandBearer.uid);
+            grabThing('.username').textContent = wandBearer.email || 'SpellCaster';
+            grabThing('.avatar').textContent = (wandBearer.email || 'S')[0].toUpperCase();
+        }
+    });
+
+    const scrollBox = grabThing('#chat-messages');
+    const ideaBox = grabThing('#user-input');
+    const flyingPigeonBtn = grabThing('#send-button');
+
+    putMessageInBottle("Hi! I'm your AI assistant. I can help you with influencer marketing, campaign management, and more. How can I help you today?", 'ai');
+
+    function putMessageInBottle(words, who) {
+        const bottle = createThing('div');
+        bottle.className = `message ${who}`;
+
+        const head = createThing('div');
+        head.className = who === 'ai' ? 'ai-avatar' : 'avatar';
+        head.innerHTML = who === 'ai'
+            ? '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#4a6cf7" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>'
+            : (fireWand.currentUser?.email || 'X')[0].toUpperCase();
+
+        const note = createThing('div');
+        note.className = 'message-content';
+        note.textContent = words;
+
+        bottle.appendChild(head);
+        bottle.appendChild(note);
+        scrollBox.appendChild(bottle);
+        scrollBox.scrollTop = scrollBox.scrollHeight;
+    }
+
+    function jiggleDots() {
+        const dancer = createThing('div');
+        dancer.className = 'message ai';
+        dancer.innerHTML = `
+            <div class="ai-avatar">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#4a6cf7" stroke-width="2">
+                    <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                </svg>
+            </div>
+            <div class="typing-indicator visible">
+                <div class="typing-dot"></div>
+                <div class="typing-dot"></div>
+                <div class="typing-dot"></div>
+            </div>
+        `;
+        scrollBox.appendChild(dancer);
+        scrollBox.scrollTop = scrollBox.scrollHeight;
+        return dancer;
+    }
+
+    pokeThing(ideaBox, 'keypress', (event) => {
+        if (event.key === 'Enter' && !event.shiftKey && ideaBox.value.trim()) {
+            yellIntoVoid();
+        }
+    });
+
+    pokeThing(flyingPigeonBtn, 'click', () => {
+        if (ideaBox.value.trim()) {
+            yellIntoVoid();
+        }
+    });
+
+    async function yellIntoVoid() {
+        const whisper = ideaBox.value.trim();
+        if (!whisper) return;
+
+        ideaBox.disabled = true;
+        flyingPigeonBtn.disabled = true;
+
+        putMessageInBottle(whisper, 'user');
+        ideaBox.value = '';
+
+        const bouncer = jiggleDots();
+
+        setTimeout(() => {
+            bouncer.remove();
+            const goblinReply = `I'm a demo AI assistant. You said: "${whisper}". In reality, I'd say something smarter here.`;
+            putMessageInBottle(goblinReply, 'ai');
+            ideaBox.disabled = false;
+            flyingPigeonBtn.disabled = false;
+            ideaBox.focus();
+        }, 1500);
+    }
+
+    // 🎩 Silly wrappers to replace inbuilt functions
+    function grabThing(selector) {
+        return document.querySelector(selector);
+    }
+
+    function createThing(what) {
+        return document.createElement(what);
+    }
+
+    function pokeThing(target, event, handler) {
+        target.addEventListener(event, handler);
+    }
+
+    function portalHopper(url) {
+        window.location.href = url;
+    }
+</script>

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Razorpay Payment</title>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/9.22.2/firebase-app-compat.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/9.22.2/firebase-firestore-compat.min.js"></script>
+    <script>
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyCibzI6I27sUFMoT-EdIlyK37lXsUBPY18",
+            authDomain: "pitchpair.firebaseapp.com",
+            projectId: "pitchpair",
+            storageBucket: "pitchpair.firebasestorage.app",
+            messagingSenderId: "674714879785",
+            appId: "1:674714879785:web:95a2dd31d0630cb7d7d938",
+            measurementId: "G-NYDM6K408F"
+        };
+
+        // Initialize Firebase
+        const app = firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        // Retrieve payment details from localStorage
+        const paymentDetails = JSON.parse(localStorage.getItem('paymentDetails'));
+
+        if (paymentDetails) {
+            const { name, invoice, amount } = paymentDetails;
+
+            const options = {
+                key: "rzp_test_DtTawXRqrkMeHh",
+                amount: amount * 100, // Amount in paise
+                currency: "INR",
+                name: "PitchPair",
+                description: `Payment for Invoice ${invoice}`,
+                image: "https://your-logo-url.com/logo.png",
+                handler: async function (response) {
+                    console.log("Payment successful! Payment ID:", response.razorpay_payment_id);
+
+                    try {
+                        const paymentData = {
+                            paymentId: response.razorpay_payment_id,
+                            name: name,
+                            invoice: invoice,
+                            amount: amount,
+                            currency: "INR",
+                            status: "Completed",
+                            date: firebase.firestore.Timestamp.now()
+                        };
+
+                        console.log("Saving payment details to Firestore:", paymentData);
+
+                        const docRef = await db.collection("payments").add(paymentData);
+                        console.log("Payment details saved with ID:", docRef.id);
+
+                        alert("Payment successful and details saved!");
+                    } catch (error) {
+                        console.error("Error saving payment details:", error);
+                        alert(`Failed to save payment details. Error: ${error.message}`);
+                    }
+                },
+                prefill: {
+                    name: name,
+                    email: "user@example.com",
+                    contact: "9999999999",
+                },
+                theme: {
+                    color: "#4a6cf7",
+                },
+            };
+
+            const rzp = new Razorpay(options);
+            rzp.open();
+        } else {
+            alert("No payment details found. Please try again.");
+            window.location.href = "payments.html";
+        }
+    </script>
+</head>
+<body>
+    <h1>Processing Payment...</h1>
+</body>
+</html>

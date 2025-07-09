@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Pitchpair</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        body {
+            background: #eef1f5;
+            color: #222;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .main-wrapper {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .top-bar {
+            text-align: center;
+            padding: 25px 0;
+        }
+
+        .brand-name {
+            font-size: 28px;
+            font-weight: bold;
+            color: #5a8dee; 
+        }
+
+        .intro-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 50px 0;
+        }
+
+        .intro-section h1 {
+            font-size: 36px;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .intro-section p {
+            font-size: 18px;
+            color: #666;
+            max-width: 650px;
+            text-align: center;
+            margin-bottom: 40px;
+            line-height: 1.6; 
+        }
+
+        .role-selection {
+            display: flex;
+            gap: 30px; 
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .role-card {
+            background: #fff;
+            border-radius: 16px; 
+            padding: 35px; 
+            flex: 1 1 320px; 
+            max-width: 420px;
+            text-align: center;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08); 
+            border: 2px solid transparent;
+            cursor: pointer;
+            position: relative;
+            transition: all 0.3s ease-in-out; 
+        }
+
+        .role-card:hover {
+            transform: translateY(-6px); 
+            border-color: #5a8dee;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+        }
+
+        .icon-area {
+            font-size: 62px; 
+            margin-bottom: 22px;
+            color: #5a8dee;
+        }
+
+        .role-card h3 {
+            font-size: 24px;
+            margin-bottom: 14px;
+            color: #444;
+        }
+
+        .role-card p {
+            color: #777;
+            font-size: 16px;
+            margin-bottom: 22px;
+            line-height: 1.5; 
+        }
+
+        .embark-btn {
+            padding: 12px 26px;
+            background-color: #5a8dee;
+            color: white;
+            border: none;
+            border-radius: 8px; 
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.2s ease-in-out;
+        }
+
+        .embark-btn:hover {
+            background-color: #467cd4;
+        }
+
+        footer {
+            padding: 20px 0; 
+            text-align: center;
+            font-size: 14px;
+            color: #999;
+        }
+
+        .role-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 5px; 
+            width: 100%;
+            background: #5a8dee;
+            transform: scaleX(0);
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+        }
+
+        .role-card:hover::after {
+            transform: scaleX(1);
+        }
+    </style>
+</head>
+<body>
+    <div class="main-wrapper">
+        <header class="top-bar">
+            <div class="brand-name">Pitchpair</div>
+        </header>
+
+        <section class="intro-section">
+            <h1>Ready to Shape Your Journey?</h1>
+            <p>Tell us a bit about your goals, and we'll help you find the perfect path to connect, create, and thrive.</p>
+
+            <div class="role-selection">
+                <div class="role-card" onclick="setUserRole('creator')">
+                    <div class="icon-area">🧑‍🎤</div>
+                    <h3>Unleash Your Creativity</h3>
+                    <p>Share your passion, team up with awesome brands, and turn your creative spark into rewarding opportunities.</p>
+                    <button class="embark-btn">Embark as a Creator</button>
+                </div>
+
+                <div class="role-card" onclick="setUserRole('company')">
+                    <div class="icon-area">🏢</div>
+                    <h3>Amplify Your Brand's Story</h3>
+                    <p>Collaborate with talented voices, reach new audiences, and watch your brand connect on a deeper level.</p>
+                    <button class="embark-btn">Grow as a Business</button>
+                </div>
+            </div>
+        </section>
+
+        <footer>
+            <p>© 2025 Pitchpair. All content and possibilities reserved.</p>
+        </footer>
+    </div>
+
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+    
+    <script>
+        // Initialize Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyCibzI6I27sUFMoT-EdIlyK37lXsUBPY18",
+            authDomain: "pitchpair.firebaseapp.com",
+            projectId: "pitchpair",
+            storageBucket: "pitchpair.firebasestorage.app",
+            messagingSenderId: "674714879785",
+            appId: "1:674714879785:web:95a2dd31d0630cb7d7d938",
+            measurementId: "G-NYDM6K408F"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+
+        // Store original button text
+        document.querySelectorAll('.embark-btn').forEach(btn => {
+            btn.setAttribute('data-original-text', btn.textContent);
+        });
+
+        // Check if user is authenticated
+        auth.onAuthStateChanged(async function(user) {
+            console.log("Auth state changed. Current user:", user);
+            if (!user) {
+                window.location.href = 'signin.html';
+                return;
+            }
+
+            // Try to create or verify users collection
+            try {
+                const usersRef = db.collection('users');
+                const userDoc = await usersRef.doc(user.uid).get();
+                console.log("User document exists:", userDoc.exists);
+            } catch (error) {
+                console.error("Error checking user document:", error);
+            }
+        });
+
+        async function setUserRole(role) {
+            const button = event.target.closest('.role-card').querySelector('.embark-btn');
+            button.disabled = true;
+            button.textContent = 'Saving...';
+
+            try {
+                const user = auth.currentUser;
+                console.log("Setting role for user:", user);
+
+                if (!user) {
+                    console.error('No user logged in');
+                    window.location.href = 'signin.html';
+                    return;
+                }
+
+                // Prepare user data
+                const userData = {
+                    uid: user.uid,
+                    email: user.email,
+                    role: role,
+                    roleSelectedAt: firebase.firestore.FieldValue.serverTimestamp(),
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                    lastUpdated: firebase.firestore.FieldValue.serverTimestamp(),
+                    username: user.displayName || user.email.split('@')[0]
+                };
+
+                // Force create/update the document
+                try {
+                    await db.collection('users').doc(user.uid).set(userData, { merge: true });
+                    console.log("Successfully saved user data:", userData);
+
+                    // Verify the save
+                    const savedDoc = await db.collection('users').doc(user.uid).get();
+                    console.log("Verified saved document:", savedDoc.exists, savedDoc.data());
+
+                    // Show success message
+                    const toast = document.createElement('div');
+                    toast.style.cssText = `
+                        position: fixed;
+                        top: 20px;
+                        right: 20px;
+                        background-color: #10b981;
+                        color: white;
+                        padding: 12px 24px;
+                        border-radius: 8px;
+                        font-weight: 500;
+                        z-index: 1000;
+                    `;
+                    toast.textContent = `Role saved: ${role}`;
+                    document.body.appendChild(toast);
+
+                    // Redirect after a delay
+                    setTimeout(() => {
+                        window.location.href = role === 'creator' ? 'infludash.html' : 'branddash.html';
+                    }, 1500);
+
+                } catch (firestoreError) {
+                    console.error("Firestore error:", firestoreError);
+                    throw firestoreError;
+                }
+
+            } catch (error) {
+                console.error("Error in setUserRole:", error);
+                alert("Failed to save role. Error: " + error.message);
+                button.disabled = false;
+                button.textContent = button.getAttribute('data-original-text');
+            }
+        }
+    </script>
+</body>
+</html>
